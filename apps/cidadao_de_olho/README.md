@@ -100,6 +100,7 @@ uv run python main.py servir-cidadao-de-olho
 - `GET /api/snapshot`
   Entrega o snapshot consolidado consumido pelo feed público.
 - `GET /api/snapshot?refresh=1`
+  ou `GET /api/snapshot?refresh=true`
   Recalcula o snapshot ignorando o cache em memória.
 
 ## Validacao
