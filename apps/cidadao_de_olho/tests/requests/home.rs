@@ -20,7 +20,7 @@ async fn can_get_home() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.text();
-        assert!(body.contains("Cidadao de Olho"));
+        assert!(body.contains("Cidadão de Olho"));
     })
     .await;
 }
@@ -38,7 +38,7 @@ async fn can_get_snapshot() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.json::<serde_json::Value>();
-        assert_eq!(body["meta"]["title"], "Cidadao de Olho");
+        assert_eq!(body["meta"]["title"], "Cidadão de Olho");
         assert!(body["feed"].as_array().is_some());
         assert_eq!(body["coverage"][0]["source"], "Câmara");
     })

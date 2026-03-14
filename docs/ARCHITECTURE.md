@@ -32,7 +32,7 @@ Responsabilidades:
 - separar parsing, wiring e handlers
 - disparar pipelines ou extratores independentes
 
-Observacao:
+Observação:
 
 - `main.py` e apenas um ponto de entrada enxuto
 - a montagem da CLI foi modularizada no pacote `cli/`
@@ -41,15 +41,15 @@ Pipeline completo:
 
 - o comando publico e `rodar-pipeline-completo`
 - a CLI apenas coleta overrides explicitos, como `--ano-inicio`, `--ano-fim` e `--max-workers`
-- a configuracao base vem da secao `[pipelines.completo]` em [etl-config.toml](br_ETL/etl-config.toml)
+- a configuracao base vem da secao `[pipelines.completo]` em [etl-config.toml](../etl-config.toml)
 - a precedencia e sempre `CLI -> etl-config.toml`
-- o preflight do pipeline completo valida a configuracao resolvida; ele nao cria defaults nem altera parametros
+- o preflight do pipeline completo valida a configuracao resolvida; ele não cria defaults nem altera parametros
 
 Pipelines locais:
 
-- `rodar-pipeline` resolve anos a partir de `[config.pipelines.camara]` quando a CLI nao informa `--ano-inicio/--ano-fim`
-- `rodar-paralelo` resolve anos, janela do PNCP, `max_workers` e fontes a partir de `[config.pipelines.paralelo]`
-- em `rodar-paralelo`, flags como `--siop/--sem-siop` e `--pncp/--sem-pncp` sao tri-state: se omitidas, o valor continua vindo do arquivo; se informadas, sobrescrevem so a execucao atual
+- `rodar-pipeline` busca anos a partir de `[config.pipelines.camara]` quando a CLI não informa `--ano-inicio/--ano-fim`
+- `rodar-paralelo` busca anos, janela do PNCP, `max_workers` e fontes a partir de `[config.pipelines.paralelo]`
+- em `rodar-paralelo`, flags como `--siop/--sem-siop` e `--pncp/--sem-pncp` são tri-state: se omitidas, o valor continua vindo do arquivo; se informadas, sobrescrevem só a execucao atual
 
 Exemplo de resolucao:
 
@@ -134,7 +134,7 @@ Padrões usados ao longo do projeto:
 O `rodar-pipeline-completo` segue uma ordem fixa em duas fases:
 
 1. preflight
-2. fontes independentes ou com orquestracao propria
+2. fontes independentes ou com orquestracao própria
 3. enriquecimentos dependentes
 
 Detalhe:

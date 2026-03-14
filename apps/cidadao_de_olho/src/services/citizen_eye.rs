@@ -1,6 +1,6 @@
 //! Orquestracao do snapshot publico do `Cidadão de Olho`.
 //!
-//! Este modulo expõe a fachada da feature. A responsabilidade aqui é pequena
+//! Este módulo expõe a fachada da feature. A responsabilidade aqui é pequena
 //! por design: carregar configuracoes, delegar leitura dos artefatos ao
 //! repositorio, reaproveitar o cache em memoria e pedir ao montador que
 //! produza o contrato JSON consumido pelo frontend.
@@ -38,7 +38,7 @@ static SERVICO: OnceLock<Arc<ServicoCidadaoDeOlho>> = OnceLock::new();
 pub fn servico_compartilhado() -> &'static Arc<ServicoCidadaoDeOlho> {
     SERVICO.get_or_init(|| {
         Arc::new(
-            ServicoCidadaoDeOlho::load().expect("falha ao inicializar o servico Cidadao de Olho"),
+            ServicoCidadaoDeOlho::load().expect("falha ao inicializar o servico Cidadão de Olho"),
         )
     })
 }

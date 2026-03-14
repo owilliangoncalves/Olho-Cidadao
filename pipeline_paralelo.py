@@ -1,6 +1,6 @@
 """Orquestra extracoes independentes em paralelo controlado.
 
-Este modulo concentra os extratores que hoje podem rodar lado a lado sem
+Este módulo concentra os extratores que hoje podem rodar lado a lado sem
 concorrer pelo mesmo conjunto de arquivos. Cada fonte continua mantendo suas
 proprias regras internas de paginacao, retomada e rate limiting.
 """
@@ -262,7 +262,7 @@ class PipelineParalelo:
         return tarefas
 
     def executar(self):
-        """Executa o conjunto de tarefas com paralelismo limitado por modulo."""
+        """Executa o conjunto de tarefas com paralelismo limitado por módulo."""
 
         tarefas = self._tarefas()
         if not tarefas:

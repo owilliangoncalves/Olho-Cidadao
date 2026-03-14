@@ -1,10 +1,17 @@
-# br_ETL
+# Olho Cidadao
 
-ETL em Python para extração, retomada e consolidação de dados públicos brasileiros com foco investigativo.
+Plataforma para extração, consolidação e publicação de dados
+públicos brasileiros.
 
-O repositório combina fontes legislativas, orçamentárias, fiscais e de compras públicas em uma única CLI, com persistência em JSON Lines, retomada por artefatos de estado e documentação modular por fonte.
+Este monorepo reúne:
 
-Na camada de entrada, `main.py` funciona como wrapper enxuto e a CLI foi modularizada em `cli/` para separar parser, handlers e utilitarios compartilhados.
+- um ETL em Python para fontes legislativas, orçamentárias, fiscais e de compras públicas
+- uma aplicação pública em `apps/cidadao_de_olho/`, com backend `Loco.rs` e frontend `React + Vite`
+- documentação modular por fonte, com foco em rastreabilidade operacional e evolução incremental
+
+Na camada de entrada do ETL, `main.py` funciona como wrapper enxuto e a CLI
+foi modularizada em `cli/` para separar parser, handlers e utilitários
+compartilhados.
 
 ## Escopo atual
 
@@ -30,6 +37,12 @@ Fontes já integradas:
 - Organização por domínio, com documentação técnica por módulo
 - CLI modularizada e infraestrutura compartilhada para concorrência e retomada
 
+## Componentes principais
+
+- `main.py`, `cli/`, `extracao/`, `infra/` e `utils/`: pipeline ETL e automação operacional
+- `apps/cidadao_de_olho/`: aplicação pública que publica snapshots e visualizações
+- `docs/`: documentação técnica por fonte e por camada do sistema
+
 ## Instalação
 
 ### Com `uv`
@@ -37,21 +50,6 @@ Fontes já integradas:
 ```bash
 uv sync
 uv run python main.py --help
-```
-
-### Com `pip`
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
-python main.py --help
-```
-
-Se você quiser apenas as dependências de runtime, sem ferramentas de desenvolvimento:
-
-```bash
-pip install -e .
 ```
 
 Após a instalação, a entrada de console também fica disponível como:
@@ -63,7 +61,7 @@ br-etl --help
 ## Configuração
 
 Os endpoints, parâmetros operacionais e defaults de execução são lidos de
-[etl-config.toml](br_ETL/etl-config.toml).
+[etl-config.toml](etl-config.toml).
 Esse é o único arquivo de configuração suportado pela aplicação.
 
 Variáveis de ambiente úteis:
@@ -114,13 +112,13 @@ que o usuario memorize toda a CLI.
 
 Regras de resolução dos pipelines:
 
-- `rodar-pipeline` usa `[config.pipelines.camara]` em [etl-config.toml](br_ETL/etl-config.toml) quando `--ano-inicio` e `--ano-fim` são omitidos
+- `rodar-pipeline` usa `[config.pipelines.camara]` em [etl-config.toml](etl-config.toml) quando `--ano-inicio` e `--ano-fim` são omitidos
 - `rodar-paralelo` usa `[config.pipelines.paralelo]` quando `--ano-inicio`, `--ano-fim`, `--pncp-data-inicial`, `--pncp-data-final` e `--max-workers` são omitidos
 - em `rodar-paralelo`, os switches `--camara/--sem-camara`, `--senado/--sem-senado`, `--siop/--sem-siop`, `--ibge/--sem-ibge`, `--pncp/--sem-pncp`, `--transferegov/--sem-transferegov`, `--obrasgov/--sem-obrasgov` e `--siconfi/--sem-siconfi` sobrescrevem `[config.pipelines.paralelo.fontes]` apenas na execução atual
 - a precedência é sempre `CLI -> etl-config.toml`
 
 O comando `rodar-pipeline-completo` lê sua configuração da seção
-`[pipelines.completo]` em [etl-config.toml](br_ETL/etl-config.toml),
+`[pipelines.completo]` em [etl-config.toml](etl-config.toml),
 e a CLI serve apenas para sobrescrever alguns parâmetros mais usados.
 Subseções como `senado`, `ibge`, `siconfi`, `portal` e `anp` também controlam
 os detalhes operacionais do comando completo.
@@ -141,7 +139,7 @@ uv run python main.py rodar-paralelo --sem-siop --max-workers 6
 ```
 
 No primeiro caso, o comando usa os valores de
-[etl-config.toml](br_ETL/etl-config.toml).
+[etl-config.toml](etl-config.toml).
 No segundo, usa os valores informados na CLI apenas para essa execução.
 No terceiro, mantém os defaults de `[config.pipelines.paralelo]`, mas desabilita `siop`
 e ajusta `max_workers` apenas nesse run.
@@ -185,7 +183,9 @@ Exemplos:
 ## Estrutura do projeto
 
 ```text
-br_ETL/
+.
+├── apps/
+│   └── cidadao_de_olho/
 ├── cli/
 ├── configuracao/
 ├── docs/
@@ -224,22 +224,21 @@ python3 -m py_compile $(rg --files -g '*.py')
 
 ## Documentação
 
-O índice técnico está em [docs/README.md](br_ETL/docs/README.md).
+- interface pública e API web: [apps/cidadao_de_olho/README.md](apps/cidadao_de_olho/README.md)
+- índice técnico do ETL: [docs/README.md](docs/README.md)
 
 Leituras recomendadas:
 
-- [Arquitetura](br_ETL/docs/ARCHITECTURE.md)
-- [Endpoints e Relevancia](br_ETL/docs/README_ENDPOINTS_RELEVANCIA.md)
-- [Câmara](br_ETL/docs/camara/README_CAMARA.md)
-- [Senado](br_ETL/docs/senado/README_SENADO.md)
-- [SIOP](br_ETL/docs/siop/README_SIOP.md)
-- [Base Pública](br_ETL/docs/publica/README_PUBLICA.md)
+- [Arquitetura](docs/ARCHITECTURE.md)
+- [Endpoints e Relevancia](docs/README_ENDPOINTS_RELEVANCIA.md)
+- [Câmara](docs/camara/README_CAMARA.md)
+- [Senado](docs/senado/README_SENADO.md)
+- [SIOP](docs/siop/README_SIOP.md)
+- [Base Pública](docs/publica/README_PUBLICA.md)
 
-## Contribuição e segurança
+## Comunidade
 
-- Guia de contribuição: [CONTRIBUTING.md](br_ETL/CONTRIBUTING.md)
-- Política de segurança: [SECURITY.md](br_ETL/SECURITY.md)
-
-## Publicação open source
-
-O repositório já está preparado tecnicamente para colaboração aberta.
+- Guia de contribuição: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Código de conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- Política de segurança: [SECURITY.md](SECURITY.md)
+- Canais de suporte e uso: [SUPPORT.md](SUPPORT.md)

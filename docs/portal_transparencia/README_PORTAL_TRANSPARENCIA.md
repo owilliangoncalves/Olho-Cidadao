@@ -1,6 +1,6 @@
-# Portal da Transparencia
+# Portal da Transparência
 
-Documentacao tecnica do modulo de enriquecimento via Portal da Transparencia.
+Documentação técnica do módulo de enriquecimento via Portal da Transparência.
 
 Arquivos principais:
 
@@ -13,10 +13,10 @@ Arquivos principais:
 
 ## Objetivo
 
-Enriquecer os fornecedores encontrados em Camara e Senado com:
+Enriquecer os fornecedores encontrados em Câmara e Senado com:
 
 - documentos por favorecido
-- sancoes CEIS, CNEP e CEPIM
+- sanções CEIS, CNEP e CEPIM
 - notas fiscais
 
 ## Requisito
@@ -35,7 +35,7 @@ export PORTAL_TRANSPARENCIA_API_KEY='sua-chave'
 uv run python main.py portal-construir-fornecedores --min-ocorrencias 2
 ```
 
-Saida:
+Saída:
 
 - `data/portal_transparencia/dimensoes/fornecedores.jsonl`
 
@@ -45,17 +45,17 @@ Saida:
 uv run python main.py extrair-portal-documentos --limit-fornecedores 100 --ano-inicio 2023 --ano-fim 2026 --fases 1 2 3
 ```
 
-Saida:
+Saída:
 
 - `data/portal_transparencia/documentos_por_favorecido/...`
 
-### 3. Sancoes
+### 3. Sanções
 
 ```bash
 uv run python main.py extrair-portal-sancoes --limit-fornecedores 100
 ```
 
-Saida:
+Saída:
 
 - `data/portal_transparencia/sancoes/...`
 
@@ -65,32 +65,32 @@ Saida:
 uv run python main.py extrair-portal-notas-fiscais --limit-fornecedores 100
 ```
 
-Saida:
+Saída:
 
 - `data/portal_transparencia/notas_fiscais/...`
 
-## Estrategia do crawler
+## Estratégia do crawler
 
-- sessao direta sem proxy
-- sessao HTTP por thread
+- sessão direta sem proxy
+- sessão HTTP por thread
 - rate limit por faixa horaria e por endpoint restrito
 - envelope `_meta + payload`
-- reprocessamento quando o arquivo antigo nao tem o esquema novo de metadados
-- concorrencia limitada com infraestrutura compartilhada
+- reprocessamento quando o arquivo antigo não tem o esquema novo de metadados
+- concorrência limitada com infraestrutura compartilhada
 
 ## Infraestrutura compartilhada
 
-O modulo do Portal reaproveita:
+O módulo do Portal reaproveita:
 
-- `extracao/portal/base.py` para autenticacao, rate limit oficial e retomada paginada
+- `extracao/portal/base.py` para autenticação, rate limit oficial e retomada paginada
 - `infra/estado/arquivos.py` para derivacao de `.tmp`, `.state.json` e `.empty`
-- `infra/concorrencia.py` para execucao paralela com backpressure e contadores thread-safe
+- `infra/concorrencia.py` para execução paralela com backpressure e contadores thread-safe
 
-Com isso, `documentos_favorecido`, `sancoes` e `notas_fiscais` deixaram de manter implementacoes quase iguais de controle de futures e estatisticas.
+Com isso, `documentos_favorecido`, `sancoes` e `notas_fiscais` deixaram de manter implementações quase iguais de controle de futures e estatisticas.
 
 ## Campos importantes para joins
 
-Na dimensao de fornecedores:
+Na dimensão de fornecedores:
 
 - `documento`
 - `tipo_documento`

@@ -58,6 +58,12 @@ O frontend vive em `ui/` e gera o bundle final em `assets/static/ui/`.
 ### Instalar dependencias
 
 ```bash
+npm ci
+```
+
+Se voce preferir um setup menos estrito durante exploracao local:
+
+```bash
 npm install
 ```
 
@@ -84,7 +90,7 @@ cargo run -- start
 Ou pela CLI principal do projeto:
 
 ```bash
-uv run python main.py servir-Cidadão-de-olho
+uv run python main.py servir-cidadao-de-olho
 ```
 
 ## Contrato da API
@@ -101,12 +107,12 @@ uv run python main.py servir-Cidadão-de-olho
 Backend:
 
 ```bash
-cargo test --manifest-path apps/Cidadão_de_olho/Cargo.toml
+cargo test --manifest-path apps/cidadao_de_olho/Cargo.toml
 ```
 
 Frontend:
 
 ```bash
-cd apps/Cidadão_de_olho/ui
+cd apps/cidadao_de_olho/ui
 npm run build
 ```

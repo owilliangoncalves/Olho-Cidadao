@@ -1,6 +1,6 @@
 # Base de APIs Publicas
 
-Documentacao da infraestrutura compartilhada usada pelos conectores mais novos do projeto.
+Documentação da infraestrutura compartilhada usada pelos conectores mais novos do projeto.
 
 Arquivo principal:
 
@@ -8,31 +8,31 @@ Arquivo principal:
 
 ## Objetivo
 
-Padronizar a extracao de APIs publicas que nao fazem parte do nucleo original de Camara, Senado e SIOP, reaproveitando:
+Padronizar a extrção de APIs publicas que não fazem parte do núcleo original de Câmara, Senado e SIOP, reaproveitando:
 
-- sessao HTTP direta sem proxy e por thread;
+- sessão HTTP direta sem proxy e por thread;
 - rate limiting por origem;
 - escrita incremental em JSON Lines;
-- controle de arquivo temporario;
+- controle de arquivo temporário;
 - retomada por arquivo de estado;
 - envelope `_meta + payload`.
 
-## Estrategia de persistencia
+## Estratégia de persistência
 
 Cada tarefa gera:
 
 - arquivo final em `data/...`
-- arquivo temporario `.tmp`
+- arquivo temporário `.tmp`
 - arquivo de estado em `data/_estado/publica/...`
-- marcador `.empty` quando a consulta nao retorna itens
+- marcador `.empty` quando a consulta não retorna itens
 
-Quando um arquivo final ja existe e o primeiro registro contem os metadados minimos esperados, a tarefa e pulada.
+Quando um arquivo final já existe e o primeiro registro contém os metadados mínimos esperados, a tarefa e pulada.
 
-Os caminhos de artefatos agora sao derivados por helper compartilhado da camada de estado, evitando divergencia entre conectores.
+Os caminhos de artefatos agora são derivados por helper compartilhado da camada de estado, evitando divergência entre conectores.
 
-## Modos de paginacao suportados
+## Modos de paginação suportados
 
-### 1. Paginacao por pagina
+### 1. Paginação por pagina
 
 Usada quando a API trabalha com parametros como:
 
@@ -40,14 +40,14 @@ Usada quando a API trabalha com parametros como:
 - `tamanhoPagina`
 - `tamanhoDaPagina`
 
-### 2. Paginacao por offset
+### 2. Paginação por offset
 
 Usada quando a API trabalha com:
 
 - `offset`
 - `limit`
 
-## Envelope padrao
+## Envelope padrão
 
 Os conectores baseados nessa infraestrutura gravam um envelope minimo por linha:
 
@@ -62,7 +62,7 @@ Os conectores baseados nessa infraestrutura gravam um envelope minimo por linha:
 }
 ```
 
-O `_meta` recebe campos adicionais conforme o modulo, por exemplo:
+O `_meta` recebe campos adicionais conforme o módulo, por exemplo:
 
 - `dataset`
 - `filtros`
@@ -71,7 +71,7 @@ O `_meta` recebe campos adicionais conforme o modulo, por exemplo:
 - `data_inicial`
 - `data_final`
 
-A validacao de reuso tambem passou a olhar diretamente para `_meta`, em vez de cada modulo implementar sua propria leitura do primeiro registro.
+A validação de reuso também passou a olhar diretamente para `_meta`, em vez de cada módulo implementar sua própria leitura do primeiro registro.
 
 ## Concorrencia
 
@@ -81,22 +81,22 @@ Os conectores que agendam varias tarefas independentes passaram a compartilhar:
 - executor com `max_workers` e `max_pending`
 - backpressure local padronizado
 
-Essa infraestrutura fica em `infra/concorrencia.py` e e reutilizada por modulos como ObrasGov e ANP.
+Essa infraestrutura fica em `infra/concorrencia.py` e e reutilizada por módulos como ObrasGov e ANP.
 
 ## Quando usar essa base
 
-Use `ExtratorAPIPublicaBase` para novas integracoes que:
+Use `ExtratorAPIPublicaBase` para novas integrações que:
 
 - exponham JSON;
 - tenham volume paginado;
 - possam ser consumidas com `GET`;
-- precisem de saida idempotente e reprocessamento seguro.
+- precisem de saída idempotente e reprocessamento seguro.
 
-## Quando nao usar
+## Quando não usar
 
 Evite essa base quando:
 
-- a API exigir autenticacao especial complexa;
-- a resposta nao for JSON;
+- a API exigir autenticação especial complexa;
+- a resposta não for JSON;
 - o fluxo depender de navegacao altamente especifica entre endpoints;
-- a fonte ja tiver um extrator legado especializado no projeto.
+- a fonte já tiver um extrator legado especializado no projeto.

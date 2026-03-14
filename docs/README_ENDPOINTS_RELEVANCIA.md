@@ -2,7 +2,7 @@
 
 Esta documentacao responde duas perguntas de forma objetiva:
 
-1. qual endpoint ou recurso cada modulo extrai;
+1. qual endpoint ou recurso cada módulo extrai;
 2. por que esse dado existe no projeto.
 
 O objetivo deste arquivo e evitar que a relevancia de cada fonte fique
@@ -17,12 +17,12 @@ Cada item abaixo informa:
 - o que ele agrega na analise;
 - quais joins futuros ele viabiliza.
 
-## Camara dos Deputados
+## Câmara dos Deputados
 
 ### `legislaturas`
 
 - papel: dimensao de legislaturas
-- o que extrai: lista de legislaturas da Camara
+- o que extrai: lista de legislaturas da Câmara
 - por que existe no projeto: define o recorte institucional correto antes de
   buscar deputados e despesas
 - joins futuros: `id_legislatura`
@@ -31,7 +31,7 @@ Cada item abaixo informa:
 
 - papel: dimensao e ponte `deputado x legislatura`
 - o que extrai: deputados vinculados a cada legislatura
-- por que existe no projeto: permite descobrir quais deputados sao validos em
+- por que existe no projeto: permite descobrir quais deputados são validos em
   cada periodo e evita pedir despesas para combinacoes historicas incoerentes
 - joins futuros: `id_deputado`, `id_legislatura`, `sigla_uf`, `sigla_partido`
 
@@ -68,14 +68,14 @@ Cada item abaixo informa:
   `codigo_acao`, `codigo_unidade`, `codigo_fonte`, `codigo_gnd`,
   `codigo_modalidade`, `codigo_elemento`, `ano`
 
-## Portal da Transparencia
+## Portal da Transparência
 
 ### `/api-de-dados/despesas/documentos-por-favorecido`
 
 - papel: detalhamento documental por fornecedor
 - o que extrai: documentos de despesa associados a um favorecido
-- por que existe no projeto: aprofunda o fornecedor ja observado em Camara e
-  Senado; nao e a base principal, e a camada de drill-down documental
+- por que existe no projeto: aprofunda o fornecedor já observado em Câmara e
+  Senado; não e a base principal, e a camada de drill-down documental
 - joins futuros: `documento`, `cnpj_base`, identificadores de documento,
   periodo, orgao
 
@@ -139,14 +139,14 @@ Cada item abaixo informa:
 
 ### `/v1/contratos`
 
-- papel: contratacao publica
+- papel: contratacao pública
 - o que extrai: contratos publicados no PNCP
-- por que existe no projeto: liga fornecedor a contratacao publica formal
+- por que existe no projeto: liga fornecedor a contratacao pública formal
 - joins futuros: CNPJ do fornecedor, numero do contrato, unidade compradora
 
 ### `/v1/atas`
 
-- papel: contratacao publica
+- papel: contratacao pública
 - o que extrai: atas registradas no PNCP
 - por que existe no projeto: complementa a leitura de compras publicas e
   permite verificar fornecedores presentes em atas e contratos
@@ -218,7 +218,7 @@ Cada item abaixo informa:
 ### `/geometria`
 
 - papel: dimensao espacial
-- o que extrai: geometria de projetos ja conhecidos
+- o que extrai: geometria de projetos já conhecidos
 - por que existe no projeto: adiciona localizacao espacial para analise
   territorial e visualizacao
 - joins futuros: `idUnico`
@@ -230,10 +230,10 @@ Cada item abaixo informa:
 - papel: dimensao de entes federativos
 - o que extrai: cadastro de entes com identificadores como codigo IBGE, CNPJ,
   UF, esfera e nome
-- por que existe no projeto: nao e a evidencia final da inconsistencia; ele
+- por que existe no projeto: não e a evidencia final da inconsistencia; ele
   existe para normalizar o ente e permitir os joins dos demais recursos do
   Siconfi e de outras fontes
-- por que entra no pipeline completo: e barato, estavel, nao exige filtros e
+- por que entra no pipeline completo: e barato, estavel, não exige filtros e
   prepara a base de identificacao para as consultas futuras
 - joins futuros: `payload.cod_ibge`, `payload.cnpj`, `payload.uf`, `id_ente`
 
@@ -303,7 +303,7 @@ Cada item abaixo informa:
 
 ### `/v1/combustivel`
 
-- papel: validacao cadastral de fornecedor
+- papel: validação cadastral de fornecedor
 - o que extrai: revendedores autorizados de combustivel
 - por que existe no projeto: testa se um fornecedor usado em despesa com
   combustivel aparece como revendedor autorizado
@@ -311,7 +311,7 @@ Cada item abaixo informa:
 
 ### `/v1/glp`
 
-- papel: validacao cadastral de fornecedor
+- papel: validação cadastral de fornecedor
 - o que extrai: revendedores autorizados de GLP
 - por que existe no projeto: amplia a verificacao para outro tipo de
   estabelecimento regulado
@@ -321,11 +321,11 @@ Cada item abaixo informa:
 
 Nem todo endpoint do projeto tem o mesmo papel.
 
-- alguns sao espinha dorsal: `deputados_despesas`, `ceaps`, SIOP,
+- alguns são espinha dorsal: `deputados_despesas`, `ceaps`, SIOP,
   Transferegov, ObrasGov, `msc_*`, `rreo`, `rgf`, `dca`
-- alguns sao dimensoes para join: `legislaturas`, `deputados`, IBGE,
+- alguns são dimensoes para join: `legislaturas`, `deputados`, IBGE,
   `entes`
-- alguns sao enriquecimento e compliance: Portal da Transparencia, ANP
+- alguns são enriquecimento e compliance: Portal da Transparência, ANP
 
 Se surgir a duvida "por que esse recurso esta no pipeline?", a resposta deve
-ser encontrada aqui de forma direta, e nao inferida do codigo.
+ser encontrada aqui de forma direta, e não inferida do codigo.

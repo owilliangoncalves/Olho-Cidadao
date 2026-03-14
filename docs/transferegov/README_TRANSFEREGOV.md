@@ -1,6 +1,6 @@
 # Transferegov
 
-Documentacao tecnica dos crawlers do ecossistema Transferegov.
+Documentação técnica dos crawlers do ecossistema Transferegov.
 
 Arquivo principal:
 
@@ -36,14 +36,14 @@ uv run python main.py extrair-transferegov-fundo --recursos programa plano_acao 
 uv run python main.py extrair-transferegov-ted --recursos programa plano_acao trf --filtro id_ente=5300108
 ```
 
-## Estrategia
+## Estratégia
 
-- paginacao por `offset` e `limit`
+- paginação por `offset` e `limit`
 - filtros livres passados pela CLI via `--filtro chave=valor`
-- saida em JSON Lines com `_meta.filtros`
+- saída em JSON Lines com `_meta.filtros`
 - nomes de arquivos derivados do conjunto de filtros aplicados
 
-## Saidas
+## Saídas
 
 - `data/transferegov/especial/<recurso>/consulta=<assinatura>.json`
 - `data/transferegov/fundoafundo/<recurso>/consulta=<assinatura>.json`
@@ -78,7 +78,7 @@ uv run python main.py extrair-transferegov-ted --recursos programa plano_acao tr
 
 ## Chaves analiticas esperadas
 
-Como os payloads sao mantidos brutos, o join futuro deve priorizar:
+Como os payloads são mantidos brutos, o join futuro deve priorizar:
 
 - identificadores internos do recurso
 - codigos de ente

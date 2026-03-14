@@ -1,6 +1,6 @@
 # IBGE Localidades
 
-Documentacao tecnica do modulo de extracao da API de localidades do IBGE.
+Documentação técnica do módulo de extração da API de localidades do IBGE.
 
 Arquivo principal:
 
@@ -8,12 +8,12 @@ Arquivo principal:
 
 ## Objetivo
 
-Fornecer a camada de normalizacao territorial do projeto para joins entre:
+Fornecer a camada de normalização territorial do projeto para joins entre:
 
-- municipio
+- município
 - UF
-- regiao
-- codigo IBGE
+- região
+- código IBGE
 
 ## Comando
 
@@ -21,23 +21,23 @@ Fornecer a camada de normalizacao territorial do projeto para joins entre:
 uv run python main.py extrair-ibge-localidades --datasets estados municipios
 ```
 
-Se nenhum dataset for informado, o modulo extrai:
+Se nenhum dataset for informado, o módulo extrai:
 
 - `regioes`
 - `estados`
 - `municipios`
 
-## Saidas
+## Saídas
 
 - `data/ibge/localidades/regioes.json`
 - `data/ibge/localidades/estados.json`
 - `data/ibge/localidades/municipios.json`
 
-## Estrategia
+## Estratégia
 
 - consulta direta sem proxy
-- chamadas nao paginadas
-- persistencia em JSON Lines com `_meta + payload`
+- chamadas não páginadas
+- persistiência em JSON Lines com `_meta + payload`
 
 ## Campos importantes para joins
 
@@ -48,7 +48,7 @@ Nos estados:
 - `payload.nome`
 - `payload.regiao.id`
 
-Nos municipios:
+Nos municípios:
 
 - `payload.id`
 - `payload.nome`

@@ -1,6 +1,6 @@
 # ANP Revendedores
 
-Documentacao tecnica do modulo de consulta de revendedores autorizados da ANP.
+Documentação técnica do módulo de consulta de revendedores autorizados da ANP.
 
 Arquivo principal:
 
@@ -13,7 +13,7 @@ Validar se fornecedores encontrados no projeto aparecem como revendedores autori
 - combustivel
 - GLP
 
-Esse modulo e especialmente util para despesas parlamentares com combustivel.
+Esse módulo e especialmente util para despesas parlamentares com combustível.
 
 ## Comando
 
@@ -23,26 +23,26 @@ uv run python main.py extrair-anp --datasets combustivel glp --min-ocorrencias 2
 
 ## Fonte de seed
 
-O modulo usa a dimensao consolidada de fornecedores do Portal:
+O módulo usa a dimensão consolidada de fornecedores do Portal:
 
 - `data/portal_transparencia/dimensoes/fornecedores.jsonl`
 
 Ele consulta apenas fornecedores classificados como `cnpj`.
 
-## Saidas
+## Saídas
 
 - `data/anp/revendedores/combustivel/fornecedor=<cnpj>.json`
 - `data/anp/revendedores/glp/fornecedor=<cnpj>.json`
 
-## Estrategia
+## Estratégia
 
 - fan-out por CNPJ
-- paginacao por `numeropagina`
+- paginação por `numeropagina`
 - envelope `_meta + payload`
-- concorrencia limitada
-- sem revalidacao imediata de consultas vazias
-- cadencia conservadora para reduzir `429`
-- consultas vazias nao deixam `.empty` residual para nao bloquear reruns futuros
+- concorrência limitada
+- sem revalidação imediata de consultas vazias
+- cadência conservadora para reduzir erro `429`
+- consultas vazias não deixam `.empty` residual para não bloquear reruns futuros
 
 ## Campos importantes para joins
 
@@ -53,13 +53,13 @@ No `_meta`:
 
 No payload, os campos devem ser tratados conforme a resposta oficial da ANP para:
 
-- identificacao do estabelecimento
-- municipio
+- identificação do estabelecimento
+- município
 - UF
-- situacao cadastral
-- data de autorizacao
+- situação cadastral
+- data de autorização
 
 ## Join sugerido
 
 - fornecedor: `_meta.documento`
-- validacao geografica: campos de municipio e UF do payload ANP
+- validação geográfica: campos de município e UF do payload ANP

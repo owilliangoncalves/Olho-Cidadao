@@ -1,6 +1,6 @@
 # Senado Federal
 
-Documentacao tecnica do modulo de extracao do Senado.
+Documentação técnica do módulo de extracao do Senado.
 
 Arquivo principal:
 
@@ -8,7 +8,7 @@ Arquivo principal:
 
 ## Objetivo
 
-Extrair o CEAPS do Senado por exercicio, com persistencia em JSON Lines e escrita atomica.
+Extrair o CEAPS do Senado por exercício, com persistência em JSON Lines e escrita atomica.
 
 ## Comando
 
@@ -16,15 +16,15 @@ Extrair o CEAPS do Senado por exercicio, com persistencia em JSON Lines e escrit
 uv run python main.py extrair-senado --endpoint ceaps
 ```
 
-## Saida
+## Saída
 
 - `data/senadores/ceaps_<ano>.json`
 
-## Estrategia do crawler
+## Estratégia do crawler
 
 - processamento do ano mais recente para o mais antigo
-- pulos automaticos quando o arquivo final ja existe no esquema novo
-- escrita em arquivo temporario `.tmp`
+- pulos automáticos quando o arquivo final já existe no esquema novo
+- escrita em arquivo temporário `.tmp`
 - arquivo de estado `.state.json` por ano
 - marcador `.empty` para anos sem dados
 - promocao atomica para o arquivo final

@@ -1,6 +1,6 @@
 # PNCP
 
-Documentacao tecnica do modulo de extracao da consulta publica do PNCP.
+Documentação técnica do módulo de extração da consulta pública do PNCP.
 
 Arquivo principal:
 
@@ -14,7 +14,7 @@ Extrair:
 - atas
 - PCA
 
-para posterior correlacao com fornecedores que aparecem em gastos parlamentares e outras bases.
+para posterior correlação com fornecedores que aparecem em gastos parlamentares e outras bases.
 
 ## Comando
 
@@ -22,21 +22,21 @@ para posterior correlacao com fornecedores que aparecem em gastos parlamentares 
 uv run python main.py extrair-pncp --data-inicial 2025-01-01 --data-final 2025-12-31 --tamanho-pagina 50
 ```
 
-Opcoes relevantes:
+Opções relevantes:
 
 - `--sem-contratos`
 - `--sem-atas`
 - `--sem-pca`
 - `--codigo-classificacao-superior`
 
-## Estrategia
+## Estratégia
 
 - contratos e atas: janelas mensais
 - PCA: processamento anual
-- paginacao por `pagina` e `tamanhoPagina`
-- persistencia em JSON Lines com envelope `_meta + payload`
+- paginação por `pagina` e `tamanhoPagina`
+- persistência em JSON Lines com envelope `_meta + payload`
 
-## Saidas
+## Saídas
 
 - `data/pncp/contratos/ano=<ano>/mes=<mes>.json`
 - `data/pncp/atas/ano=<ano>/mes=<mes>.json`

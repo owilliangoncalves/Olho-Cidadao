@@ -1,6 +1,6 @@
-# Camara dos Deputados
+# Câmara dos Deputados
 
-Documentacao tecnica do modulo de extracao da Camara.
+Documentação técnica do módulo de extracao da Câmara.
 
 Arquivos principais:
 
@@ -12,7 +12,7 @@ Arquivos principais:
 
 ## Objetivo
 
-Extrair a cadeia base da Camara:
+Extrair a cadeia base da Câmara:
 
 1. legislaturas
 2. deputados por legislatura
@@ -29,7 +29,7 @@ Comando:
 uv run python main.py baixar-legislaturas
 ```
 
-Saida:
+Saída:
 
 - `data/legislaturas.json`
 
@@ -41,7 +41,7 @@ Comando:
 uv run python main.py extrair-legislaturas
 ```
 
-Saida:
+Saída:
 
 - `data/deputados_por_legislaturas/deputados_legislaturas_<id>.json`
 
@@ -57,7 +57,7 @@ Observacao:
 
 - `ano-fim` e exclusivo
 
-Saida:
+Saída:
 
 - `data/despesas_deputados_federais/<ano>/despesas_<id>.json`
 
@@ -69,19 +69,19 @@ Comando:
 uv run python main.py gerar-csv
 ```
 
-Saida:
+Saída:
 
 - `data/csv/despesas.csv`
 
-## Estrategia do crawler
+## Estratégia do crawler
 
 - leitura progressiva de arquivos de deputados
 - filtragem por janela temporal da legislatura
 - priorizacao de anos mais recentes
 - checkpoint por `(endpoint, deputado, ano)` em arquivos `.state.json`
-- escrita incremental em JSON Lines com arquivo temporario `.tmp`
+- escrita incremental em JSON Lines com arquivo temporário `.tmp`
 - marcador `.empty` para tarefas confirmadas como vazias
-- reprocessamento automatico quando o arquivo antigo nao contem o esquema novo
+- reprocessamento automático quando o arquivo antigo não contém o esquema novo
 
 ## Campos importantes para banco e joins
 
@@ -120,4 +120,4 @@ uv run python main.py rodar-pipeline
 
 Se `--ano-inicio` e `--ano-fim` forem omitidos, o comando usa
 `[config.pipelines.camara]` em
-[etl-config.toml](br_ETL/etl-config.toml).
+[etl-config.toml](../../etl-config.toml).

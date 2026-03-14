@@ -1,6 +1,6 @@
 # ObrasGov
 
-Documentacao tecnica do modulo de extracao do ObrasGov.
+Documentacão técnica do módulo de extração do ObrasGov.
 
 Arquivo principal:
 
@@ -8,9 +8,9 @@ Arquivo principal:
 
 ## Objetivo
 
-Capturar a camada fisica e financeira de investimentos em infraestrutura, especialmente para correlacionar:
+Capturar a camada física e financeira de investimentos em infraestrutura, especialmente para correlacionar:
 
-- transferencia
+- transferência
 - obra
 - executor
 - geografia
@@ -36,15 +36,15 @@ uv run python main.py extrair-obrasgov --recursos projeto-investimento execucao-
 uv run python main.py extrair-obrasgov-geometrias --limit-ids 500
 ```
 
-## Estrategia
+## Estratégia
 
 - recursos paginados por `pagina` e `tamanhoDaPagina`
-- geometrias extraidas a partir dos `idUnico` ja persistidos em projetos
-- se a extracao de `projeto-investimento` parar no meio, `extrair-obrasgov-geometrias` tambem aproveita os registros ja gravados em `consulta=*.json.tmp`
+- geometrias extraídas a partir dos `idUnico` já persistidos em projetos
+- se a extração de `projeto-investimento` parar no meio, `extrair-obrasgov-geometrias` também aproveita os registros já gravados em `consulta=*.json.tmp`
 - escrita em JSON Lines com envelope `_meta + payload`
-- concorrencia limitada para geometrias
+- concorrência limitada para geometrias
 
-## Saidas
+## Saídas
 
 - `data/obrasgov/projeto-investimento/consulta=<assinatura>.json`
 - `data/obrasgov/execucao-fisica/consulta=<assinatura>.json`
@@ -63,7 +63,7 @@ Nos projetos:
 - `payload.dataCadastro`
 - `payload.situacao`
 
-Nas execucoes:
+Nas execuções:
 
 - `payload.idProjetoInvestimento`
 - `payload.nrNotaEmpenho`
@@ -73,4 +73,4 @@ Nas execucoes:
 
 - projeto: `payload.idUnico`
 - executor ou tomador: codigos CNPJ/identificadores presentes em arrays
-- correlacao financeira: `idProjetoInvestimento`, `nrNotaEmpenho`, `ugEmitente`
+- correlação financeira: `idProjetoInvestimento`, `nrNotaEmpenho`, `ugEmitente`

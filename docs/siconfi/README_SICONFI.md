@@ -1,6 +1,6 @@
 # Siconfi
 
-Documentacao tecnica do modulo de extracao da API de dados abertos do Siconfi.
+Documentação técnica do módulo de extracao da API de dados abertos do Siconfi.
 
 Arquivo principal:
 
@@ -22,7 +22,7 @@ uv run python main.py extrair-siconfi --recursos extrato_entregas --filtro id_en
 uv run python main.py extrair-siconfi --recursos msc_orcamentaria --filtro id_ente=3550308 --filtro an_referencia=2024 --filtro me_referencia=12 --filtro co_tipo_matriz=MSCC --filtro classe_conta=6 --filtro id_tv=period_change
 ```
 
-Quando os recursos exigirem filtros diferentes, prefira comandos separados. Um unico bloco de `--filtro` e compartilhado por todos os recursos selecionados na mesma execucao.
+Quando os recursos exigirem filtros diferentes, prefira comandos separados. Um unico bloco de `--filtro` e compartilhado por todos os recursos selecionados na mesma execução.
 
 ## Recursos suportados
 
@@ -35,17 +35,17 @@ Quando os recursos exigirem filtros diferentes, prefira comandos separados. Um u
 - `rgf`
 - `dca`
 
-## Estrategia
+## Estratégia
 
-- paginacao por `offset` e `limit`
-- saida em JSON Lines com `_meta.filtros`
-- preservacao do payload bruto do Siconfi
-- validacao local dos filtros obrigatorios por recurso, antes da primeira request
-- normalizacao de aliases comuns como `exercicio -> an_referencia` e `cod_ibge -> id_ente`
+- paginação por `offset` e `limit`
+- saída em JSON Lines com `_meta.filtros`
+- preservação do payload bruto do Siconfi
+- validação local dos filtros obrigatórios por recurso, antes da primeira request
+- normalizacao de aliases comuns como `exercício -> an_referencia` e `cod_ibge -> id_ente`
 
-## Filtros obrigatorios por recurso
+## Filtros obrigatórios por recurso
 
-- `entes`: nenhum filtro obrigatorio
+- `entes`: nenhum filtro obrigatório
 - `extrato_entregas`: `id_ente`, `an_referencia`
 - `msc_orcamentaria`: `id_ente`, `an_referencia`, `me_referencia`, `co_tipo_matriz`, `classe_conta`, `id_tv`
 - `msc_controle`: `id_ente`, `an_referencia`, `me_referencia`, `co_tipo_matriz`, `classe_conta`, `id_tv`
@@ -56,18 +56,18 @@ Quando os recursos exigirem filtros diferentes, prefira comandos separados. Um u
 
 ## Aliases aceitos
 
-Para reduzir erros de uso, o extrator aceita alguns aliases e os converte para o nome oficial da API:
+Para reduzir erros de uso, o extrator aceita alguns aliases (apelidos) e os converte para o nome oficial da API:
 
 - `cod_ibge -> id_ente`
-- `exercicio -> an_referencia` nos recursos `extrato_entregas` e `msc_*`
-- `exercicio -> an_exercicio` nos recursos `rreo`, `rgf` e `dca`
+- `exercício -> an_referencia` nos recursos `extrato_entregas` e `msc_*`
+- `exercício -> an_exercicio` nos recursos `rreo`, `rgf` e `dca`
 - `ano_referencia -> an_referencia`
 - `ano_exercicio -> an_exercicio`
 - `mes` ou `mes_referencia -> me_referencia`
 - `tipo_matriz -> co_tipo_matriz`
 - `tipo_valor -> id_tv`
 
-## Saidas
+## Saídas
 
 - `data/siconfi/<recurso>/consulta=<assinatura>.json`
 
@@ -79,28 +79,28 @@ Exemplos observados em `entes`:
 - `payload.ente`
 - `payload.uf`
 - `payload.esfera`
-- `payload.exercicio`
+- `payload.exercício`
 - `payload.populacao`
 - `payload.cnpj`
 
 ## Por que `entes` esta no pipeline completo
 
-`entes` nao entra no pipeline completo para "provar" uma inconsistencia por si
-so. Ele entra por um motivo mais basico e mais importante:
+`entes` não entra no pipeline completo para "provar" uma inconsistencia por si
+so. Ele entra por um motivo mais básico e mais importante:
 
-- fornecer a dimensao de entes federativos usada para identificar corretamente
-  municipio, estado, esfera e CNPJ;
+- fornecer a dimensão de entes federativos usada para identificar corretamente
+  município, estado, esfera e CNPJ;
 - preparar os joins dos demais recursos do Siconfi, que em geral dependem de
   `id_ente`;
-- oferecer uma base estavel e barata de extrair, sem filtros obrigatorios;
+- oferecer uma base estavel e barata de extrair, sem filtros obrigatórios;
 - reduzir ambiguidade quando o projeto cruzar Siconfi com IBGE, Transferegov,
   ObrasGov e outras fontes.
 
 Em resumo:
 
-- `entes` e uma dimensao de identificacao;
-- `msc_*`, `rreo`, `rgf` e `dca` sao os recursos que carregam o conteudo
-  contabil e fiscal mais analitico.
+- `entes` e uma dimensão de identificação;
+- `msc_*`, `rreo`, `rgf` e `dca` são os recursos que carregam o conteúdo
+  contabil e fiscal mais analítico.
 
 Nos demais recursos, o join tende a usar:
 
@@ -114,9 +114,9 @@ Nos demais recursos, o join tende a usar:
 ## Join sugerido
 
 - ente federativo: `payload.cod_ibge`, `payload.cnpj` ou `id_ente`
-- comparacao temporal: exercicio, ano e mes de referencia
+- comparação temporal: exercício, ano e mês de referência
 
 ## Observacoes operacionais
 
-- `status=empty` nem sempre significa ausencia de dados historicos; antes desta validacao o caso mais comum era consulta incompleta.
-- O crawler agora falha cedo com mensagem clara quando faltam filtros obrigatorios, evitando gastar requests com combinacoes invalidas.
+- `status=empty` nem sempre significa ausência de dados históricos; antes desta validação o caso mais comum era consulta incompleta.
+- O crawler agora falha cedo com mensagem clara quando faltam filtros obrigatórios, evitando gastar requests com combinações inválidas.
