@@ -136,11 +136,7 @@ impl MontadorSnapshot {
             meta: SnapshotMeta {
                 generated_at: Local::now().to_rfc3339_opts(SecondsFormat::Secs, false),
                 title: self.ui_config.branding.title.clone(),
-                sources: vec![
-                    "camara".to_string(),
-                    "senado".to_string(),
-                    "portal_transparencia".to_string(),
-                ],
+                sources: vec!["camara".to_string(), "senado".to_string()],
                 coverage_years: coverage_years.clone(),
                 notes: self.ui_config.copy.methodology.clone(),
                 ui: UiPayload::from_copy(
