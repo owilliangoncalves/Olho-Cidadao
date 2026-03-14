@@ -1,0 +1,26 @@
+[branding]
+title = "Cidadão de Olho"
+eyebrow = "Rede civica de monitoramento"
+headline = "Leia gasto publico como um feed social, mas com rastreabilidade e contexto."
+subheadline = "A proposta do Cidadão de Olho e transformar dados publicos fragmentados em uma experiencia acessivel para a populacao, sem esconder origem, periodo, fornecedor e tipo de despesa."
+refresh_label = "Atualizar leitura"
+
+[copy]
+feed_title = "Feed civico"
+feed_subtitle = "Uma timeline publica para aproximar o acompanhamento do gasto da linguagem que as pessoas ja usam todos os dias."
+search_label = "Buscar nome, fornecedor ou tipo"
+search_placeholder = "Ex: combustivel, Uber, passagens"
+guide_title = "Como ler este ambiente"
+guide_body = "Cada card representa um registro publico ja extraido pelo ETL. A interface tenta aproximar a leitura de uma rede social, mas sem esconder metadados, fonte, periodo e valor."
+methodology_title = "Metodologia"
+methodology = [
+  "Os dados exibidos aqui sao lidos diretamente dos artefatos locais ja gerados pelo ETL.",
+  "Os cards sao pontos de observacao e nao juizo definitivo sobre irregularidades.",
+  "A melhor leitura vem do cruzamento entre agente publico, fornecedor, periodo e tipo de despesa.",
+]
+empty_feed_message = "Nenhum card corresponde ao filtro atual. Tente limpar a busca ou trocar a fonte."
+coverage_title = "Cobertura das fontes"
+highlights_title = "Radar rapido"
+suppliers_title = "Top fornecedores"
+agents_title = "Top agentes publicos"
+expenses_title = "Tipos de despesa"

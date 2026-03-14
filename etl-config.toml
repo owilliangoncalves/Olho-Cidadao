@@ -1,0 +1,283 @@
+[camara]
+base_url = "https://dadosabertos.camara.leg.br/api/v2/"
+
+[endpoints.legislaturas]
+endpoint = "legislaturas"
+salvar_como = "legislaturas.json"
+paginacao = true
+itens = 5000
+
+[endpoints.deputados]
+endpoint = "deputados?idLegislatura={id}"
+salvar_como = "deputados_por_legislaturas"
+paginacao = true
+itens = 5000
+depende_de = "legislaturas"
+campo_id = "id"
+
+[endpoints.deputados_despesas]
+endpoint = "deputados/{id}/despesas"
+salvar_como = "despesas_deputados_federais"
+paginacao = true
+itens = 5000
+depende_de = "deputados"
+campo_id = "id"
+
+[senado]
+base_url = "https://adm.senado.gov.br/adm-dadosabertos/api/v1/"
+
+[endpoints.ceaps]
+endpoint = "senadores/despesas_ceaps/{ano}"
+ano_inicio = 2008
+ano_fim = 2026
+
+[portal_transparencia]
+base_url = "https://api.portaldatransparencia.gov.br"
+
+[endpoints.portal_documentos_favorecido]
+endpoint = "/api-de-dados/despesas/documentos-por-favorecido"
+restricted = true
+fases = [1, 2, 3]
+
+[endpoints.portal_ceis]
+endpoint = "/api-de-dados/ceis"
+restricted = false
+
+[endpoints.portal_cnep]
+endpoint = "/api-de-dados/cnep"
+restricted = false
+
+[endpoints.portal_cepim]
+endpoint = "/api-de-dados/cepim"
+restricted = false
+
+[endpoints.portal_notas_fiscais]
+endpoint = "/api-de-dados/notas-fiscais"
+restricted = false
+
+[siop]
+base_url = "http://www1.siop.planejamento.gov.br"
+
+[ibge]
+base_url = "https://servicodados.ibge.gov.br"
+
+[pncp]
+base_url = "https://pncp.gov.br/pncp-consulta"
+
+[transferegov_especial]
+base_url = "https://api.transferegov.gestao.gov.br/transferenciasespeciais"
+
+[transferegov_fundoafundo]
+base_url = "https://api.transferegov.gestao.gov.br/fundoafundo"
+
+[transferegov_ted]
+base_url = "https://api.transferegov.gestao.gov.br/ted"
+
+[obrasgov]
+base_url = "https://api.obrasgov.gestao.gov.br/obrasgov/api"
+
+[siconfi]
+base_url = "https://apidatalake.tesouro.gov.br/ords/siconfi/tt"
+
+[anp]
+base_url = "https://revendedoresapi.anp.gov.br"
+
+[endpoints.pncp_contratos]
+endpoint = "/v1/contratos"
+
+[endpoints.pncp_atas]
+endpoint = "/v1/atas"
+
+[endpoints.pncp_pca]
+endpoint = "/v1/pca/"
+
+[pipelines.completo]
+ano_inicio = 2012
+ano_fim = 2026
+max_workers = 4
+
+[pipelines.completo.fontes]
+camara = true
+senado = true
+siop = true
+ibge = true
+pncp = true
+transferegov = true
+obrasgov = true
+siconfi = true
+portal = true
+anp = true
+obrasgov_geometrias = true
+
+[pipelines.completo.portal]
+min_ocorrencias = 1
+fases = [1, 2, 3]
+
+[pipelines.completo.senado]
+endpoint = "ceaps"
+
+[pipelines.completo.ibge]
+datasets = ["regioes", "estados", "municipios"]
+
+[pipelines.completo.pncp]
+data_inicial = "start_of_current_year"
+data_final = "today"
+
+[pipelines.completo.siconfi]
+recursos = ["entes"]
+tamanho_pagina = 1000
+
+[pipelines.completo.anp]
+min_ocorrencias = 1
+datasets = ["combustivel", "glp"]
+
+[config.http.default]
+rate_limit_per_sec = 2.0
+max_rate_per_sec = 4.0
+
+[config.http.camara]
+rate_limit_per_sec = 4.0
+max_rate_per_sec = 8.0
+
+[config.cli.intervalo_anos]
+ano_inicio = 2012
+ano_fim = 2026
+
+[config.cli.gerar_csv]
+data_dir = "data"
+output_dir = "data"
+
+[config.cli.portal]
+min_ocorrencias = 1
+fases = [1, 2, 3]
+
+[config.cli.extrair_senado]
+endpoint = "ceaps"
+
+[config.cli.extrair_ibge_localidades]
+datasets = ["regioes", "estados", "municipios"]
+
+[config.cli.extrair_pncp]
+data_inicial = "start_of_current_year"
+data_final = "today"
+tamanho_pagina = 50
+
+[config.cli.extrair_transferegov]
+tamanho_pagina = 1000
+
+[config.cli.extrair_obrasgov]
+tamanho_pagina = 200
+
+[config.cli.extrair_siconfi]
+recursos = ["entes"]
+tamanho_pagina = 1000
+
+[config.cli.extrair_anp]
+min_ocorrencias = 1
+datasets = ["combustivel", "glp"]
+
+[config.pipelines.camara]
+ano_inicio = 2012
+ano_fim = 2026
+
+[config.pipelines.paralelo]
+ano_inicio = 2012
+ano_fim = 2026
+pncp_data_inicial = "start_of_current_year"
+pncp_data_final = "today"
+max_workers = 4
+senado_endpoint = "ceaps"
+ibge_datasets = ["regioes", "estados", "municipios"]
+siconfi_recursos = ["entes"]
+siconfi_filtros = {}
+siconfi_tamanho_pagina = 1000
+
+[config.pipelines.paralelo.fontes]
+camara = true
+senado = true
+siop = true
+ibge = true
+pncp = true
+transferegov = true
+obrasgov = true
+siconfi = true
+
+[config.pipelines.portal]
+min_ocorrencias = 1
+fases = [1, 2, 3]
+
+[config.extratores.publica]
+rate_limit_per_sec = 2.0
+max_rate_per_sec = 4.0
+
+[config.extratores.camara.legislaturas]
+arquivo_saida = "legislaturas.json"
+
+[config.extratores.camara.deputados_legislatura]
+arquivo_entrada = "data/legislaturas.json"
+pasta_saida = "deputados_por_legislaturas"
+prefixo_arquivo = "deputados_legislaturas"
+max_workers = 6
+
+[config.extratores.camara.deputados_despesas]
+rate_limit_per_sec = 6.0
+max_rate_per_sec = 10.0
+
+[config.extratores.pncp]
+page_size = 50
+rate_limit_per_sec = 1.5
+max_rate_per_sec = 3.0
+
+[config.extratores.transferegov]
+page_size = 1000
+rate_limit_per_sec = 1.5
+max_rate_per_sec = 3.0
+
+[config.extratores.obrasgov]
+page_size = 200
+max_workers = 4
+rate_limit_per_sec = 0.5
+max_rate_per_sec = 1.0
+
+[config.extratores.siconfi]
+page_size = 1000
+rate_limit_per_sec = 1.5
+max_rate_per_sec = 3.0
+
+[config.extratores.anp]
+min_ocorrencias = 1
+datasets = ["combustivel", "glp"]
+max_workers = 2
+rate_limit_per_sec = 0.5
+max_rate_per_sec = 0.5
+
+[config.extratores.portal.api]
+restricted_limit_rpm = 180
+day_limit_rpm = 400
+night_limit_rpm = 700
+timezone = "America/Sao_Paulo"
+
+[config.extratores.portal.fornecedores]
+min_ocorrencias = 1
+
+[config.extratores.portal.documentos]
+max_workers = 4
+
+[config.extratores.portal.sancoes]
+max_workers = 6
+
+[config.extratores.portal.notas_fiscais]
+max_workers = 6
+
+[config.extratores.siop]
+page_size_inicial = 400
+page_size_minima = 50
+detail_batch_size = 100
+max_query_length = 7000
+rate_limit_per_sec = 1.0
+max_rate_per_sec = 2.0
+funcoes_orcamentarias = [
+  "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+  "21", "22", "23", "24", "25", "26", "27", "28", "99",
+]
