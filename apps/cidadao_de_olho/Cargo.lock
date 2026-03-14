@@ -536,6 +536,7 @@ dependencies = [
  "rstest",
  "serde",
  "serde_json",
+ "serde_urlencoded",
  "serial_test",
  "tokio",
  "toml 0.9.12+spec-1.1.0",
