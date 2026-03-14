@@ -1,0 +1,33 @@
+**/config/local.yaml
+**/config/*.local.yaml
+
+# Artefatos de compilacao Rust
+debug/
+target/
+
+# Mantem o lockfile versionado
+!Cargo.lock
+
+# Backups do rustfmt
+**/*.rs.bk
+
+# Artefatos de debug do Windows
+*.pdb
+
+# Bancos locais
+*.sqlite
+*.sqlite-*
+
+# Frontend local
+ui/node_modules
+ui/dist/
+ui/.vite/
+ui/.env
+ui/.env.local
+ui/.env.development.local
+ui/.env.test.local
+ui/.env.production.local
+
+# Logs locais
+*.log
+.cargo

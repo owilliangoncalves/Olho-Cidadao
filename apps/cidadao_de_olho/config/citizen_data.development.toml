@@ -1,0 +1,9 @@
+[paths]
+project_root = "../.."
+camara_csv = "data/csv/despesas.csv"
+senado_dir = "data/senadores"
+suppliers_jsonl = "data/portal_transparencia/dimensoes/fornecedores.jsonl"
+
+[limits]
+max_feed_items = 60
+max_ranking_items = 8

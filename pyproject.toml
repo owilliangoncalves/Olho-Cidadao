@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "br-etl"
+version = "0.1.0"
+description = "ETL de dados de APIs governamentais brasileiras para investigação e análise"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "python-dotenv>=1.2.2",
+    "requests>=2.32.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.15.5",
+]
+
+[project.scripts]
+br-etl = "main:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.5",
+]
+
+[tool.setuptools]
+py-modules = ["main", "pipeline", "pipeline_paralelo", "pipeline_portal"]
+
+[tool.setuptools.packages.find]
+include = ["cli*", "configuracao*", "extracao*", "infra*", "utils*"]
+namespaces = true
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
