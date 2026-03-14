@@ -24,16 +24,16 @@ para rastrear a passagem de recursos entre origem federal e destino executor.
 uv run python main.py extrair-transferegov-especial --recursos programa_especial plano_acao_especial --filtro ano_programa=2025
 ```
 
-### Fundo a Fundo
+### Fundo a Fundo Comando
 
 ```bash
 uv run python main.py extrair-transferegov-fundo --recursos programa plano_acao --filtro id_ente=3550308
 ```
 
-### TED
+### TEDs
 
 ```bash
-uv run python main.py extrair-transferegov-ted --recursos programa plano_acao trf --filtro id_ente=5300108
+uv run python main.py extrair-transferegov-teds --recursos programa plano_acao trf --filtro id_ente=5300108
 ```
 
 ## Estratégia
@@ -47,7 +47,7 @@ uv run python main.py extrair-transferegov-ted --recursos programa plano_acao tr
 
 - `data/transferegov/especial/<recurso>/consulta=<assinatura>.json`
 - `data/transferegov/fundoafundo/<recurso>/consulta=<assinatura>.json`
-- `data/transferegov/ted/<recurso>/consulta=<assinatura>.json`
+- `data/transferegov/teds/<recurso>/consulta=<assinatura>.json`
 
 ## Recursos hoje suportados
 
@@ -67,7 +67,7 @@ uv run python main.py extrair-transferegov-ted --recursos programa plano_acao tr
 - `empenho`
 - `relatorio_gestao`
 
-### TED
+### Tranferências
 
 - `programa`
 - `plano_acao`
