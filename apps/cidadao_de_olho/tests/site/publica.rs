@@ -15,7 +15,7 @@ async fn raiz_entrega_html_publico() {
         assert_eq!(res.status_code(), 200);
         let body = res.text();
         assert!(body.contains("<html"));
-        assert!(body.contains("Cidadão de Olho"));
+        assert!(body.contains("<title>Olho Cidadão</title>"));
     })
     .await;
 }

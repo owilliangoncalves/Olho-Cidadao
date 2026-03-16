@@ -20,7 +20,7 @@ async fn can_get_home() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.text();
-        assert!(body.contains("Cidadão de Olho"));
+        assert!(body.contains("<title>Olho Cidadão</title>"));
     })
     .await;
 }
