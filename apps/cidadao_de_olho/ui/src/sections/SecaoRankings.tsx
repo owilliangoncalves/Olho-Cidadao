@@ -6,97 +6,55 @@
  */
 import { BarChart3 } from "lucide-react";
 
-import { MolduraSecao } from "../components/dashboard/Estrutura";
-import {
-  ListaLeituraCurta,
-  MenuSecundario,
-  PainelInfo,
-} from "../components/dashboard/Paineis";
+import { ListaLeituraCurta } from "../components/dashboard/ListaLeituraCurta";
+import { MenuSecundario } from "../components/dashboard/MenuSecundario";
+import { MolduraSecao } from "../components/dashboard/MolduraSecao";
+import { PainelInfo } from "../components/dashboard/PainelInfo";
 import { RankingList } from "../components/RankingList";
-import { abasRanking, type AbaRanking } from "../config/social";
-import type { RankingItem, Snapshot } from "../types";
+import { montarModeloSecaoRankings } from "../lib/montarModeloSecaoRankings";
+import type { AbaRanking, SecaoRankingsProps } from "../types";
 
 /** Renderiza os rankings com navegação interna por categoria. */
 export function SecaoRankings({
   snapshot,
   activeTab,
   onChangeTab,
-}: {
-  snapshot: Snapshot;
-  activeTab: AbaRanking;
-  onChangeTab: (value: AbaRanking) => void;
-}) {
-  const paineis: Record<
-    AbaRanking,
-    {
-      title: string;
-      eyebrow: string;
-      description: string;
-      items: RankingItem[];
-    }
-  > = {
-    fornecedores: {
-      title: snapshot.meta.ui.suppliers_title,
-      eyebrow: "Fornecedores",
-      description:
-        "Ranking consolidado de fornecedores que mais aparecem nas despesas visiveis.",
-      items: snapshot.rankings.fornecedores,
-    },
-    agentes: {
-      title: snapshot.meta.ui.agents_title,
-      eyebrow: "Agentes",
-      description:
-        "Agentes publicos com maior volume no recorte atual das bases monitoradas.",
-      items: snapshot.rankings.agentes,
-    },
-    tipos: {
-      title: snapshot.meta.ui.expenses_title,
-      eyebrow: "Tipos",
-      description:
-        "Classificações de despesa mais presentes na combinacao atual de Camara e Senado.",
-      items: snapshot.rankings.tipos_despesa,
-    },
-    ufs: {
-      title: "Mapa de UF",
-      eyebrow: "UFs",
-      description:
-        "Distribuicao por unidade federativa.",
-      items: snapshot.rankings.ufs,
-    },
-  };
-
-  const painelAtivo = paineis[activeTab];
+}: SecaoRankingsProps) {
+  const modelo = montarModeloSecaoRankings(snapshot, activeTab);
 
   return (
     <MolduraSecao
-      eyebrow="Comparativos"
-      title="Rankings com submenu"
-      description="No desktop, os rankings agora ficam separados por submenu para evitar quatro painéis concorrendo pela mesma tela."
+      eyebrow={modelo.moldura.eyebrow}
+      title={modelo.moldura.title}
+      description={modelo.moldura.description}
     >
       <MenuSecundario
         value={activeTab}
         onValueChange={(value) => onChangeTab(value as AbaRanking)}
-        items={abasRanking}
+        items={modelo.abasRanking}
       />
 
       <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         <RankingList
-          eyebrow={painelAtivo.eyebrow}
-          title={painelAtivo.title}
-          description={painelAtivo.description}
-          items={painelAtivo.items}
+          eyebrow={modelo.painelAtivo.eyebrow}
+          title={modelo.painelAtivo.title}
+          description={modelo.painelAtivo.description}
+          items={modelo.painelAtivo.items}
           heightClass="h-[34rem]"
           className="bg-[#0d1018]/82"
         />
 
         <div className="space-y-4">
           <PainelInfo
-            eyebrow="Leitura"
-            title="Como usar este submenu"
-            description="Cada submenu isola uma pergunta: quem recebe mais, quem gasta mais, que tipo pesa mais e quais UFs mais aparecem."
+            eyebrow={modelo.ajuda.eyebrow}
+            title={modelo.ajuda.title}
+            description={modelo.ajuda.description}
             icon={<BarChart3 size={18} />}
           />
-          <ListaLeituraCurta items={painelAtivo.items.slice(0, 3)} />
+          <ListaLeituraCurta
+            eyebrow={modelo.leituraCurta.eyebrow}
+            items={modelo.leituraCurta.items}
+          />
         </div>
       </div>
     </MolduraSecao>

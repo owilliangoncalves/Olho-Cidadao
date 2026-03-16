@@ -1,8 +1,4 @@
-/**
- * Utilitários de filtragem e identidade do feed.
- */
-import type { FiltroFonte } from "../config/social";
-import type { FeedCard } from "../types";
+import type { FeedCard, FiltroFonte } from "../types";
 
 /** Aplica filtro textual e filtro por fonte sobre os cards do feed. */
 export function filtrarFeed(
@@ -32,9 +28,4 @@ export function filtrarFeed(
 
     return sourceMatches && haystack.includes(normalizedQuery);
   });
-}
-
-/** Gera uma chave estável o bastante para renderização da timeline. */
-export function chaveFeed(item: FeedCard): string {
-  return `${item.source}-${item.period}-${item.actor}-${item.supplier}-${item.amount}`;
 }

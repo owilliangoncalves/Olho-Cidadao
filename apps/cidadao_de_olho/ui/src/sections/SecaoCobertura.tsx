@@ -6,53 +6,50 @@
  */
 import { ShieldAlert } from "lucide-react";
 
-import { MolduraSecao } from "../components/dashboard/Estrutura";
-import {
-  CartaoCobertura,
-  CartaoDestaque,
-  MenuSecundario,
-  PainelInfo,
-  TrilhoGuia,
-} from "../components/dashboard/Paineis";
-import { abasCobertura, type AbaCobertura } from "../config/social";
-import type { Snapshot } from "../types";
+import { CartaoCobertura } from "../components/dashboard/CartaoCobertura";
+import { CartaoDestaque } from "../components/dashboard/CartaoDestaque";
+import { MenuSecundario } from "../components/dashboard/MenuSecundario";
+import { MolduraSecao } from "../components/dashboard/MolduraSecao";
+import { PainelInfo } from "../components/dashboard/PainelInfo";
+import { TrilhoGuia } from "../components/dashboard/TrilhoGuia";
+import { montarModeloSecaoCobertura } from "../lib/montarModeloSecaoCobertura";
+import type { AbaCobertura, SecaoCoberturaProps } from "../types";
 
 /** Renderiza a área de cobertura da aplicação com submenu interno. */
 export function SecaoCobertura({
   snapshot,
   activeTab,
   onChangeTab,
-}: {
-  snapshot: Snapshot;
-  activeTab: AbaCobertura;
-  onChangeTab: (value: AbaCobertura) => void;
-}) {
-  const ui = snapshot.meta.ui;
+}: SecaoCoberturaProps) {
+  const modelo = montarModeloSecaoCobertura(snapshot);
 
   return (
     <MolduraSecao
-      eyebrow="Transparência"
-      title="Cobertura e notas"
-      description="A seção de cobertura reúne as fontes monitoradas, os destaques produzidos e a metodologia que sustenta a leitura."
+      eyebrow={modelo.moldura.eyebrow}
+      title={modelo.moldura.title}
+      description={modelo.moldura.description}
     >
       <MenuSecundario
         value={activeTab}
         onValueChange={(value) => onChangeTab(value as AbaCobertura)}
-        items={abasCobertura}
+        items={modelo.abasCobertura}
       />
 
       {activeTab === "fontes" ? (
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
-          {snapshot.coverage.map((item) => (
-            <CartaoCobertura key={item.source} item={item} />
+          {modelo.cobertura.map((item) => (
+            <CartaoCobertura
+              key={item.id}
+              item={item}
+            />
           ))}
         </div>
       ) : null}
 
       {activeTab === "destaques" ? (
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
-          {snapshot.highlights.map((item) => (
-            <CartaoDestaque key={item.title} item={item} />
+          {modelo.destaques.map((item) => (
+            <CartaoDestaque key={item.id} item={item} />
           ))}
         </div>
       ) : null}
@@ -61,10 +58,10 @@ export function SecaoCobertura({
         <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
           <section className="rounded-[2rem] border border-white/8 bg-white/5 p-5 backdrop-blur-sm">
             <p className="text-[11px] uppercase tracking-[0.24em] text-stone-500">
-              {ui.methodology_title}
+              {modelo.metodologiaTitle}
             </p>
             <div className="mt-4 space-y-3">
-              {snapshot.meta.notes.map((note) => (
+              {modelo.notasMetodologia.map((note) => (
                 <div
                   key={note}
                   className="rounded-[1.5rem] border border-white/8 bg-[#0a0d15]/72 p-4 text-sm leading-7 text-stone-200"
@@ -77,14 +74,15 @@ export function SecaoCobertura({
 
           <div className="space-y-4">
             <TrilhoGuia
-              title={ui.guide_title}
-              body={ui.guide_body}
-              notes={snapshot.meta.notes}
+              eyebrow={modelo.guia.eyebrow}
+              title={modelo.guia.title}
+              body={modelo.guia.body}
+              notes={modelo.guia.notes}
             />
             <PainelInfo
-              eyebrow="Contrato de leitura"
-              title="Os cards não são conclusão automática"
-              description="A interface ajuda a aproximar a linguagem visual da rede social, mas não reduz a exigência de contexto, fonte e rastreabilidade."
+              eyebrow={modelo.contrato.eyebrow}
+              title={modelo.contrato.title}
+              description={modelo.contrato.description}
               icon={<ShieldAlert size={18} />}
             />
           </div>

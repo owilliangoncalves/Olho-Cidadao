@@ -33,6 +33,30 @@ from .common import parse_data_iso
 CommandHandler = Callable[[argparse.Namespace], None]
 
 
+def _binario_cidadao_de_olho(app_dir, release: bool):
+    """Resolve o caminho do binario compilado do app web."""
+
+    perfil = "release" if release else "debug"
+    return app_dir / "target" / perfil / "cidadao_de_olho-cli"
+
+
+def _binario_cidadao_de_olho_esta_atualizado(app_dir, binario) -> bool:
+    """Verifica se o binario e mais novo do que as fontes Rust do app."""
+
+    if not binario.exists():
+        return False
+
+    referencias = [
+        app_dir / "Cargo.toml",
+        app_dir / "Cargo.lock",
+        *sorted((app_dir / "src").rglob("*.rs")),
+    ]
+    instante_referencia = max(
+        caminho.stat().st_mtime for caminho in referencias if caminho.exists()
+    )
+    return binario.stat().st_mtime >= instante_referencia
+
+
 def handle_menu(_: argparse.Namespace):
     """Abre o menu interativo do terminal."""
 
@@ -51,20 +75,31 @@ def handle_servir_cidadao_de_olho(args: argparse.Namespace):
             f"Aplicacao Loco.rs nao encontrada em {manifest_path}."
         )
 
-    comando = ["cargo", "run", "--manifest-path", str(manifest_path)]
-    if args.release:
-        comando.append("--release")
-    comando.extend(["--", "start"])
-
     ambiente = os.environ.copy()
     ambiente["LOCO_ENV"] = args.ambiente
+    binario = _binario_cidadao_de_olho(app_dir, args.release)
 
-    subprocess.run(
-        comando,
-        cwd=app_dir,
-        env=ambiente,
-        check=True,
-    )
+    try:
+        if not _binario_cidadao_de_olho_esta_atualizado(app_dir, binario):
+            comando_build = ["cargo", "build", "--manifest-path", str(manifest_path)]
+            if args.release:
+                comando_build.append("--release")
+
+            subprocess.run(
+                comando_build,
+                cwd=app_dir,
+                env=ambiente,
+                check=True,
+            )
+
+        subprocess.run(
+            [str(binario), "start"],
+            cwd=app_dir,
+            env=ambiente,
+            check=True,
+        )
+    except KeyboardInterrupt:
+        return
 
 
 def handle_gerar_csv(args: argparse.Namespace):
