@@ -10,7 +10,10 @@ use std::{
 
 use chrono::{Local, SecondsFormat};
 
-use crate::config::{citizen_data::CitizenDataLimits, citizen_ui::CitizenUiConfig};
+use crate::config::{
+    citizen_data::CitizenDataLimits, citizen_ui::CitizenUiConfig, glossario::GlossarioConfig,
+    textos::TextosConfig,
+};
 
 use super::{
     dominio::{
@@ -19,8 +22,9 @@ use super::{
     },
     formatacao::{format_currency, format_share, share_of},
     modelos::{
-        CoverageCard, FeedCard, HeroSection, HighlightCard, MetricCard, RankingGroups, RankingItem,
-        Snapshot, SnapshotMeta, UiPayload,
+        CoverageCard, FeedCard, HeroSection, HighlightCard, MetricCard,
+        RankingGroups, RankingItem, Snapshot, SnapshotMeta, UiPayload,
+        TermoGlossario,
     },
 };
 
@@ -34,6 +38,8 @@ enum RankingMetric {
 pub(crate) struct MontadorSnapshot {
     limits: CitizenDataLimits,
     ui_config: CitizenUiConfig,
+    glossario_config: GlossarioConfig,
+    textos_config: TextosConfig,
 }
 
 #[derive(Default)]
@@ -50,8 +56,27 @@ struct AcumuladorSnapshot {
 
 impl MontadorSnapshot {
     /// Cria o montador com os limites de exposição e a copy da interface.
-    pub(crate) fn new(limits: CitizenDataLimits, ui_config: CitizenUiConfig) -> Self {
-        Self { limits, ui_config }
+    pub(crate) fn new(
+        limits: CitizenDataLimits,
+        ui_config: CitizenUiConfig,
+        glossario_config: GlossarioConfig,
+        textos_config: TextosConfig,
+    ) -> Self {
+        Self {
+            limits,
+            ui_config,
+            glossario_config,
+            textos_config,
+        }
+    }
+
+    /// Retorna o payload de interface independente do snapshot de dados.
+    pub(crate) fn ui_publica(&self) -> UiPayload {
+        UiPayload::from_configuracoes(
+            &self.ui_config.copy,
+            &self.ui_config.branding.refresh_label,
+            &self.textos_config,
+        )
     }
 
     /// Constrói o snapshot completo a partir das entradas já normalizadas.
@@ -139,10 +164,7 @@ impl MontadorSnapshot {
                 sources: vec!["camara".to_string(), "senado".to_string()],
                 coverage_years: coverage_years.clone(),
                 notes: self.ui_config.copy.methodology.clone(),
-                ui: UiPayload::from_copy(
-                    &self.ui_config.copy,
-                    &self.ui_config.branding.refresh_label,
-                ),
+                ui: self.ui_publica(),
             },
             hero: HeroSection {
                 eyebrow: self.ui_config.branding.eyebrow.clone(),
@@ -248,6 +270,12 @@ impl MontadorSnapshot {
                 tipos_despesa: top_expenses,
                 ufs: top_ufs,
             },
+            glossario: self
+                .glossario_config
+                .termos
+                .iter()
+                .map(TermoGlossario::from_config)
+                .collect(),
             feed: feed_cards,
         }
     }

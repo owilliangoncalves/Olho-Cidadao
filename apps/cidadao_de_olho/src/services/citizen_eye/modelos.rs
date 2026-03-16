@@ -4,7 +4,9 @@
 
 use serde::Serialize;
 
-use crate::config::citizen_ui::CopyConfig;
+use crate::config::{
+    citizen_ui::CopyConfig, glossario::TermoGlossarioConfig, textos::TextosConfig,
+};
 
 #[derive(Clone, Debug, Serialize)]
 /// Snapshot completo consumido pela interface pública.
@@ -14,6 +16,7 @@ pub struct Snapshot {
     pub highlights: Vec<HighlightCard>,
     pub coverage: Vec<CoverageCard>,
     pub rankings: RankingGroups,
+    pub glossario: Vec<TermoGlossario>,
     pub feed: Vec<FeedCard>,
 }
 
@@ -46,11 +49,16 @@ pub struct UiPayload {
     pub suppliers_title: String,
     pub agents_title: String,
     pub expenses_title: String,
+    pub textos: TextosConfig,
 }
 
 impl UiPayload {
     /// Converte a configuração de copy em payload pronto para a interface.
-    pub fn from_copy(copy: &CopyConfig, refresh_label: &str) -> Self {
+    pub fn from_configuracoes(
+        copy: &CopyConfig,
+        refresh_label: &str,
+        textos: &TextosConfig,
+    ) -> Self {
         Self {
             eyebrow: "Feed civico".to_string(),
             refresh_label: refresh_label.to_string(),
@@ -67,6 +75,7 @@ impl UiPayload {
             suppliers_title: copy.suppliers_title.clone(),
             agents_title: copy.agents_title.clone(),
             expenses_title: copy.expenses_title.clone(),
+            textos: textos.clone(),
         }
     }
 }
@@ -115,6 +124,29 @@ pub struct RankingGroups {
     pub agentes: Vec<RankingItem>,
     pub tipos_despesa: Vec<RankingItem>,
     pub ufs: Vec<RankingItem>,
+}
+
+#[derive(Clone, Debug, Serialize)]
+/// Termo do glossario acessivel exibido na interface.
+pub struct TermoGlossario {
+    pub termo: String,
+    pub grupo: String,
+    pub definicao: String,
+    pub contexto: String,
+    pub relacionados: Vec<String>,
+}
+
+impl TermoGlossario {
+    /// Converte a configuracao editorial em payload publico.
+    pub fn from_config(config: &TermoGlossarioConfig) -> Self {
+        Self {
+            termo: config.termo.clone(),
+            grupo: config.grupo.clone(),
+            definicao: config.definicao.clone(),
+            contexto: config.contexto.clone(),
+            relacionados: config.relacionados.clone(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize)]
