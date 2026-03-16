@@ -1,13 +1,3 @@
-//! Entrega da interface web pública.
-//!
-//! O backend serve o `index.html` gerado pelo frontend e faz fallback para uma
-//! página mínima quando o bundle ainda não foi compilado.
-
-use axum::{
-    debug_handler,
-    response::{Html, IntoResponse, Response},
-};
-use loco_rs::prelude::*;
 use std::{fs, path::Path};
 
 const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
@@ -16,7 +6,7 @@ const FALLBACK_HTML: &str = r#"<!doctype html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cidadão de Olho</title>
+    <title>Olho Cidadão</title>
     <style>
       body {
         margin: 0;
@@ -47,27 +37,15 @@ const FALLBACK_HTML: &str = r#"<!doctype html>
   </head>
   <body>
     <main>
-      <h1>Cidadão de Olho</h1>
+      <h1>Olho Cidadão</h1>
       <p>A interface publica ainda nao foi compilada.</p>
       <p>Execute <code>npm install</code> e depois <code>npm run build</code> em <code>apps/cidadao_de_olho/ui</code> para gerar a camada visual que o Loco.rs entrega em <code>/</code>.</p>
     </main>
   </body>
 </html>"#;
 
-#[debug_handler]
-/// Entrega o HTML inicial da aplicação.
-async fn index() -> Result<Response> {
-    let html = load_index_html();
-    Ok(Html(html).into_response())
-}
-
-/// Registra a rota raiz da interface web.
-pub fn routes() -> Routes {
-    Routes::new().add("/", get(index))
-}
-
 /// Lê o `index.html` do frontend compilado ou devolve um fallback explicativo.
-fn load_index_html() -> String {
+pub(super) fn load_index_html() -> String {
     let path = Path::new(MANIFEST_DIR).join("assets/static/ui/index.html");
     fs::read_to_string(path).unwrap_or_else(|_| FALLBACK_HTML.to_string())
 }

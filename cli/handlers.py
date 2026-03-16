@@ -66,7 +66,7 @@ def handle_menu(_: argparse.Namespace):
 
 
 def handle_servir_cidadao_de_olho(args: argparse.Namespace):
-    """Sobe a aplicacao publica Cidadão de Olho baseada em Loco.rs."""
+    """Sobe a aplicacao publica Olho Cidadão baseada em Loco.rs."""
 
     app_dir = PROJECT_ROOT / "apps" / "cidadao_de_olho"
     manifest_path = app_dir / "Cargo.toml"
