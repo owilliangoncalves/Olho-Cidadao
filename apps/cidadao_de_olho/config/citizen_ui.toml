@@ -1,26 +1,26 @@
 [branding]
-title = "Cidadão de Olho"
-eyebrow = "Rede civica de monitoramento"
-headline = "Leia gasto publico como um feed social, mas com rastreabilidade e contexto."
-subheadline = "A proposta do Cidadão de Olho e transformar dados publicos fragmentados em uma experiencia acessivel para a populacao, sem esconder origem, periodo, fornecedor e tipo de despesa."
-refresh_label = "Atualizar leitura"
+title = "Olho Cidadão"
+eyebrow = "Monitoramento do gasto público"
+headline = "Acompanhe como o dinheiro público é utilizado, de forma simples e transparente."
+subheadline = "O Olho Cidadão organiza dados oficiais em uma experiência fácil de ler, destacando quem gastou, quanto e com quem."
+refresh_label = "Atualizar dados"
 
 [copy]
-feed_title = "Feed civico"
-feed_subtitle = "Uma timeline publica para aproximar o acompanhamento do gasto da linguagem que as pessoas ja usam todos os dias."
-search_label = "Buscar nome, fornecedor ou tipo"
-search_placeholder = "Ex: combustivel, Uber, passagens"
-guide_title = "Como ler este ambiente"
-guide_body = "Cada card representa um registro publico ja extraido pelo ETL. A interface tenta aproximar a leitura de uma rede social, mas sem esconder metadados, fonte, periodo e valor."
-methodology_title = "Metodologia"
+feed_title = "Linha do tempo"
+feed_subtitle = "Acompanhe os gastos públicos em um formato familiar e fácil de entender."
+search_label = "Buscar nome ou fornecedor"
+search_placeholder = "Ex: combustível, passagens, etc"
+guide_title = "Como navegar"
+guide_body = "Cada card apresenta um registro de gasto público. Você pode ver detalhes como a fonte do recurso, o período e o fornecedor envolvido."
+methodology_title = "Sobre os dados"
 methodology = [
-  "Os dados exibidos aqui sao lidos diretamente dos artefatos locais ja gerados pelo ETL.",
-  "Os cards sao pontos de observacao e nao juizo definitivo sobre irregularidades.",
-  "A melhor leitura vem do cruzamento entre agente publico, fornecedor, periodo e tipo de despesa.",
+  "Os dados são obtidos diretamente de fontes oficiais de transparência.",
+  "As informações são organizadas para facilitar a visualização e o controle social.",
+  "Recomendamos observar o contexto completo: quem gastou, quem recebeu e o tipo da despesa.",
 ]
-empty_feed_message = "Nenhum card corresponde ao filtro atual. Tente limpar a busca ou trocar a fonte."
-coverage_title = "Cobertura das fontes"
-highlights_title = "Radar rapido"
-suppliers_title = "Top fornecedores"
-agents_title = "Top agentes publicos"
+empty_feed_message = "Nenhum resultado encontrado para o filtro atual."
+coverage_title = "Fontes oficiais"
+highlights_title = "Destaques"
+suppliers_title = "Fornecedores"
+agents_title = "Agentes públicos"
 expenses_title = "Tipos de despesa"

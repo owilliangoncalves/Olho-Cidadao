@@ -8,7 +8,7 @@ use std::path::Path;
 use anyhow::Result;
 use serde::Deserialize;
 
-use super::carregador::carregar_config_toml;
+use super::carregador::{caminho_config, carregar_config_toml};
 
 const MANIFEST_DIR: &str = env!("CARGO_MANIFEST_DIR");
 
@@ -31,7 +31,7 @@ pub struct TermoGlossarioConfig {
 impl GlossarioConfig {
     /// Carrega o glossario editorial do app.
     pub fn load() -> Result<Self> {
-        let path = Path::new(MANIFEST_DIR).join("config").join("glossario.toml");
+        let path = caminho_config(Path::new(MANIFEST_DIR), "glossario.toml");
         carregar_config_toml(&path)
     }
 }

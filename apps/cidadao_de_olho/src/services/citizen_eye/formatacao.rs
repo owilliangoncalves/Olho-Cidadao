@@ -10,8 +10,7 @@ pub(crate) fn fallback_text(value: Option<&str>, fallback: &str) -> String {
     value
         .map(str::trim)
         .filter(|value| !value.is_empty())
-        .map(str::to_string)
-        .unwrap_or_else(|| fallback.to_string())
+        .map_or_else(|| fallback.to_string(), str::to_string)
 }
 
 /// Normaliza um campo opcional removendo espaços e descartando strings vazias.

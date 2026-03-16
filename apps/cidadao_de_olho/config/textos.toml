@@ -1,5 +1,5 @@
 [barra_superior]
-subtitulo = "radar publico"
+subtitulo = ""
 atualizado_prefixo = "Atualizado"
 cobertura_prefixo = "Cobertura"
 cobertura_em_carga = "Cobertura em carga"
@@ -7,10 +7,10 @@ rotulo_aria_navegacao = "Navegacao principal"
 
 [estados]
 carregando_sobrelinha = "Carregando"
-carregando_titulo = "Montando o feed civico"
-carregando_descricao = "Cruzando Camara, Senado e a dimensao publica de fornecedores."
+carregando_titulo = "Montando a interface"
+carregando_descricao = "Cruzando os dados disponíveis."
 falha_sobrelinha = "Falha de leitura"
-falha_titulo = "O radar publico nao abriu agora"
+falha_titulo = "Não foi possível abrir a interface agora"
 botao_tentar_novamente = "Tentar novamente"
 
 [compartilhado]
@@ -30,18 +30,18 @@ cartao_feed_valor = "Valor"
 cartao_feed_documento_ausente = "documento nao informado"
 
 [visao_geral]
-rotulo_navegacao = "Inicio"
-sobrelinha_navegacao = "Entrada"
-descricao_navegacao = "Panorama, hero e contexto rapido."
+rotulo_navegacao = "Início"
+sobrelinha_navegacao = "Bem-vindo"
+descricao_navegacao = "Acompanhe os gastos públicos de forma simples e direta."
 botao_abrir_feed = "Abrir feed"
 botao_ver_cobertura = "Ver cobertura"
-sobrelinha_radar = "Radar rapido"
-titulo_radar = "Comece pelo essencial"
-descricao_radar = "Os destaques abaixo organizam os sinais mais fortes da leitura atual sem disputar atencao com a navegacao."
-titulo_leitura = "Leitura publica com rastreabilidade"
-descricao_leitura = "Atualizado em {gerado_em}. Fontes ativas: {fontes_ativas}. Os dados saem dos artefatos ja preparados para leitura publica e cada bloco preserva origem, periodo, agente, fornecedor e valor."
-titulo_cobertura = "Cobertura ativa"
-descricao_cobertura = "Cada bloco resume o tamanho do recorte visivel e o foco editorial de cada fonte monitorada."
+sobrelinha_radar = "Destaques"
+titulo_radar = "O essencial agora"
+descricao_radar = "Os principais registros organizados para facilitar sua leitura."
+titulo_leitura = "Acompanhamento transparente"
+descricao_leitura = "Dados atualizados em {gerado_em} com base em {fontes_ativas}."
+titulo_cobertura = "Fontes monitoradas"
+descricao_cobertura = "Confira o volume de dados e o período coberto por cada fonte."
 
 [feed]
 rotulo_navegacao = "Feed"
