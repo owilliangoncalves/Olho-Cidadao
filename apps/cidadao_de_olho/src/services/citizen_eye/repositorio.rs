@@ -112,7 +112,7 @@ impl RepositorioDadosCidadao {
 
     /// Lê todos os artefatos e devolve entradas normalizadas para o montador.
     pub(crate) fn carregar_entradas(&self) -> Result<EntradasSnapshot> {
-        let (supplier_aliases, supplier_dimension_count) = self.load_supplier_dimension()?;
+        let (supplier_aliases, supplier_dimension_count) = self.carregar_dimensao_fornecedores()?;
         let mut records = Vec::new();
 
         self.carregar_camara(&supplier_aliases, &mut records)?;
@@ -125,7 +125,8 @@ impl RepositorioDadosCidadao {
     }
 
     /// Carrega a dimensão de fornecedores usada para enriquecer nomes por documento.
-    fn load_supplier_dimension(
+    /// Esta dimensão correlaciona documentos (CNPJ/CPF) com seus nomes principais.
+    fn carregar_dimensao_fornecedores(
         &self,
     ) -> Result<(std::collections::HashMap<String, String>, usize)> {
         let path = self.config.suppliers_jsonl_path();
@@ -179,16 +180,11 @@ impl RepositorioDadosCidadao {
             let party = fallback_text(row.sigla_partido_deputado.as_deref(), "Sem partido");
             let uf = fallback_text(row.sigla_uf_deputado.as_deref(), "BR");
             let supplier_doc = normalize_optional(row.documento_fornecedor_normalizado.as_deref());
-            let supplier = supplier_doc
-                .as_ref()
-                .and_then(|doc| supplier_aliases.get(doc))
-                .cloned()
-                .unwrap_or_else(|| {
-                    fallback_text(
-                        row.nome_fornecedor.as_deref(),
-                        "Fornecedor nao identificado",
-                    )
-                });
+            let supplier = resolve_supplier_name(
+                supplier_aliases,
+                supplier_doc.as_deref(),
+                row.nome_fornecedor.as_deref(),
+            );
             let expense_type =
                 fallback_text(row.tipo_despesa.as_deref(), "Despesa nao classificada");
             let actor_rank_key = format!(
@@ -245,20 +241,17 @@ impl RepositorioDadosCidadao {
                 let actor = fallback_text(row.nome_senador.as_deref(), "Senador nao identificado");
                 let supplier_doc =
                     normalize_optional(row.documento_fornecedor_normalizado.as_deref());
-                let supplier = supplier_doc
-                    .as_ref()
-                    .and_then(|doc| supplier_aliases.get(doc))
-                    .cloned()
-                    .unwrap_or_else(|| {
-                        fallback_text(row.fornecedor.as_deref(), "Fornecedor nao identificado")
-                    });
+                let supplier = resolve_supplier_name(
+                    supplier_aliases,
+                    supplier_doc.as_deref(),
+                    row.fornecedor.as_deref(),
+                );
                 let expense_type =
                     fallback_text(row.tipo_despesa.as_deref(), "Despesa nao classificada");
                 let period = row
                     .data
                     .as_deref()
-                    .map(str::to_string)
-                    .unwrap_or_else(|| period_label(year, month));
+                    .map_or_else(|| period_label(year, month), str::to_string);
                 let sort_key = row
                     .data
                     .as_deref()
@@ -307,4 +300,15 @@ impl RepositorioDadosCidadao {
         paths.sort();
         Ok(paths)
     }
+}
+
+fn resolve_supplier_name(
+    supplier_aliases: &std::collections::HashMap<String, String>,
+    supplier_doc: Option<&str>,
+    fallback_name: Option<&str>,
+) -> String {
+    supplier_doc
+        .and_then(|doc| supplier_aliases.get(doc))
+        .cloned()
+        .unwrap_or_else(|| fallback_text(fallback_name, "Fornecedor nao identificado"))
 }
