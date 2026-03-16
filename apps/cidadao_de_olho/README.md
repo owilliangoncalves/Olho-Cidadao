@@ -13,7 +13,11 @@ Aplicacao publica do projeto, construida com `Loco.rs` no backend e uma camada `
 - `src/config/citizen_data.rs`
   Carrega os caminhos e limites de leitura dos dados.
 - `src/config/citizen_ui.rs`
-  Carrega branding e textos exibidos na interface.
+  Carrega branding e textos estruturais da interface.
+- `src/config/textos.rs`
+  Carrega os textos editoriais organizados por pagina.
+- `src/config/glossario.rs`
+  Carrega os termos editoriais do glossario acessivel.
 - `ui/`
   Workspace do frontend com React, Tailwind, Vite e Radix UI.
 
@@ -47,7 +51,11 @@ As responsabilidades ficam separadas por arquivo:
 - `config/citizen_data.development.toml`, `config/citizen_data.test.toml`, `config/citizen_data.production.toml`
   Caminhos de entrada e limites de leitura dos dados públicos.
 - `config/citizen_ui.toml`
-  Textos, branding e copy da interface.
+  Branding e textos estruturais compartilhados pela interface.
+- `config/textos.toml`
+  Textos editoriais organizados por pagina e por areas compartilhadas.
+- `config/glossario.toml`
+  Termos e explicacoes da pagina de glossario acessivel.
 - `ui/.env.example`
   Configuracao da base da API consumida pelo frontend.
 
@@ -79,6 +87,23 @@ npm run build
 npm run dev
 ```
 
+Por padrao, o Vite encaminha `/api` para `http://127.0.0.1:5150`, entao o fluxo local fica:
+
+1. em um terminal, subir o backend:
+
+```bash
+uv run python main.py servir-cidadao-de-olho
+```
+
+2. em outro terminal, subir o frontend:
+
+```bash
+cd apps/cidadao_de_olho/ui
+npm run dev
+```
+
+Se o backend estiver em outra porta ou host, ajuste `VITE_CITIZEN_DEV_API_PROXY_TARGET` no `.env`.
+
 ## Backend
 
 Para iniciar o app `Loco.rs`:
@@ -102,6 +127,8 @@ uv run python main.py servir-cidadao-de-olho
 - `GET /api/snapshot?refresh=1`
   ou `GET /api/snapshot?refresh=true`
   Recalcula o snapshot ignorando o cache em memória.
+- `GET /api/interface`
+  Entrega a configuracao textual publica usada antes do primeiro snapshot.
 
 ## Validacao
 

@@ -1,0 +1,111 @@
+[[termos]]
+termo = "Agente publico"
+grupo = "Leitura do dado"
+definicao = "A pessoa que aparece no gasto monitorado, como deputado, senadora ou senador."
+contexto = "Quando um card mostra quem solicitou, recebeu ou registrou uma despesa, ele esta falando do agente publico."
+relacionados = ["Fornecedor", "Despesa"]
+
+[[termos]]
+termo = "Fornecedor"
+grupo = "Leitura do dado"
+definicao = "A empresa, pessoa ou organizacao que recebeu o pagamento mostrado no radar."
+contexto = "O nome do fornecedor ajuda a entender com quem o dinheiro publico foi gasto."
+relacionados = ["Agente publico", "Valor consolidado"]
+
+[[termos]]
+termo = "Despesa"
+grupo = "Leitura do dado"
+definicao = "E um gasto registrado em base publica, como passagem, combustivel, hotel ou divulgacao."
+contexto = "Cada card do feed resume uma despesa ou um registro ligado a uma despesa."
+relacionados = ["Tipo de despesa", "Periodo"]
+
+[[termos]]
+termo = "Tipo de despesa"
+grupo = "Leitura do dado"
+definicao = "E a categoria do gasto. Ela diz para que o dinheiro foi usado."
+contexto = "Esse campo ajuda a comparar gastos parecidos sem depender so do nome do fornecedor."
+relacionados = ["Despesa", "Ranking"]
+
+[[termos]]
+termo = "Fonte"
+grupo = "Leitura do dado"
+definicao = "E o lugar de onde o dado veio, como Camara ou Senado."
+contexto = "Saber a fonte ajuda a entender a origem do registro e comparar regras diferentes entre bases."
+relacionados = ["Cobertura", "Rastreabilidade"]
+
+[[termos]]
+termo = "Periodo"
+grupo = "Leitura do dado"
+definicao = "E a data ou faixa de tempo em que o gasto aconteceu ou foi registrado."
+contexto = "O periodo ajuda a localizar o contexto do gasto e a acompanhar mudancas ao longo do tempo."
+relacionados = ["Despesa", "Recorte"]
+
+[[termos]]
+termo = "Cobertura"
+grupo = "Leitura do dado"
+definicao = "E o tamanho do recorte que a interface conseguiu ler nas bases monitoradas."
+contexto = "Cobertura nao quer dizer todo o universo de dados; quer dizer o que esta disponivel e foi processado aqui."
+relacionados = ["Fonte", "Recorte"]
+
+[[termos]]
+termo = "Valor consolidado"
+grupo = "Leitura do dado"
+definicao = "E a soma dos valores visiveis no recorte atual da aplicacao."
+contexto = "Esse numero muda conforme a cobertura, as fontes lidas e os filtros aplicados."
+relacionados = ["Cobertura", "Fornecedor"]
+
+[[termos]]
+termo = "Feed civico"
+grupo = "Interface"
+definicao = "E a lista principal da interface, organizada como um fluxo de leitura continua."
+contexto = "A ideia e usar uma linguagem visual familiar sem esconder origem, periodo e valor do gasto."
+relacionados = ["Card", "Rastreabilidade"]
+
+[[termos]]
+termo = "Card"
+grupo = "Interface"
+definicao = "E cada bloco individual do feed com resumo de um registro publico."
+contexto = "Um card junta, no mesmo lugar, agente publico, fornecedor, valor, tipo de despesa e fonte."
+relacionados = ["Feed civico", "Rastreabilidade"]
+
+[[termos]]
+termo = "Ranking"
+grupo = "Interface"
+definicao = "E uma lista ordenada para mostrar quem mais aparece ou concentra mais valor no recorte."
+contexto = "Ranking ajuda a comparar rapidamente, mas nao substitui a leitura detalhada de cada registro."
+relacionados = ["Tipo de despesa", "Fornecedor"]
+
+[[termos]]
+termo = "Rastreabilidade"
+grupo = "Interface"
+definicao = "E a capacidade de voltar do resumo para a origem do dado e entender de onde ele veio."
+contexto = "Sem rastreabilidade, a interface fica bonita, mas perde confianca e contexto."
+relacionados = ["Fonte", "Card"]
+
+[[termos]]
+termo = "Recorte"
+grupo = "Metodo"
+definicao = "E a parte do conjunto total de dados que esta sendo mostrada naquele momento."
+contexto = "O recorte pode mudar por ano, por fonte, por filtros e pelo que a preparacao dos dados conseguiu processar."
+relacionados = ["Cobertura", "Periodo"]
+
+[[termos]]
+termo = "Preparacao dos dados"
+grupo = "Metodo"
+definicao = "E o processo tecnico que coleta, organiza e prepara os dados antes de eles chegarem a interface."
+contexto = "Quando a aplicacao fala em arquivos preparados, esta falando dos dados ja tratados para leitura publica."
+relacionados = ["Leitura consolidada", "Metodologia"]
+
+[[termos]]
+termo = "Leitura consolidada"
+grupo = "Metodo"
+definicao = "E o retrato consolidado do radar em um certo momento."
+contexto = "Ele reune metricas, destaques, rankings, cobertura e feed para a interface carregar mais rapido."
+relacionados = ["Preparacao dos dados", "Valor consolidado"]
+
+[[termos]]
+termo = "Metodologia"
+grupo = "Metodo"
+definicao = "E a explicacao de como os dados foram lidos, organizados e apresentados."
+contexto = "A metodologia ajuda a entender limites, escolhas e cuidados antes de tirar conclusoes."
+relacionados = ["Preparacao dos dados", "Rastreabilidade"]

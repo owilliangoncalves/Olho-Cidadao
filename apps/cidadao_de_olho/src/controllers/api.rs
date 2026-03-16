@@ -48,6 +48,13 @@ async fn health() -> Result<Response> {
 }
 
 #[debug_handler]
+/// Entrega a configuracao textual da interface publica.
+async fn interface() -> Result<Response> {
+    let service = servico_compartilhado().map_err(|error| Error::string(&error.to_string()))?;
+    format::json(service.interface_publica())
+}
+
+#[debug_handler]
 /// Entrega o snapshot público consolidado consumido pelo frontend.
 ///
 /// O cálculo roda em `spawn_blocking` porque envolve leitura de disco e
@@ -68,6 +75,7 @@ pub fn routes() -> Routes {
     Routes::new()
         .prefix("/api")
         .add("/health", get(health))
+        .add("/interface", get(interface))
         .add("/snapshot", get(snapshot))
 }
 
