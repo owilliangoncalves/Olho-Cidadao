@@ -20,7 +20,7 @@ async fn can_get_home() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.text();
-        assert!(body.contains("Olho Cidadão"));
+        assert!(body.contains("Cidadão de Olho"));
     })
     .await;
 }
@@ -38,7 +38,7 @@ async fn can_get_public_interface_texts() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.json::<serde_json::Value>();
-        assert_eq!(body["textos"]["visao_geral"]["rotulo_navegacao"], "Inicio");
+        assert_eq!(body["textos"]["visao_geral"]["rotulo_navegacao"], "Início");
     })
     .await;
 }
@@ -57,7 +57,10 @@ async fn can_get_snapshot() {
         assert_eq!(res.status_code(), 200);
         let body = res.json::<serde_json::Value>();
         assert_eq!(body["meta"]["title"], "Olho Cidadão");
-        assert_eq!(body["meta"]["sources"], serde_json::json!(["camara", "senado"]));
+        assert_eq!(
+            body["meta"]["sources"],
+            serde_json::json!(["camara", "senado"])
+        );
         assert!(body["feed"].as_array().is_some());
         assert!(body["glossario"].as_array().is_some());
         assert_eq!(body["coverage"][0]["source"], "Câmara");
