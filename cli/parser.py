@@ -75,7 +75,7 @@ def _registrar_comando_cidadao_de_olho(subparsers: Any):
     parser_web = subparsers.add_parser(
         "servir-cidadao-de-olho",
         aliases=["abrir-cidadao-de-olho"],
-        help="Inicia a aplicacao publica Cidadão de Olho em Loco.rs.",
+        help="Inicia a aplicacao publica Olho Cidadão em Loco.rs.",
     )
     parser_web.add_argument(
         "--ambiente",

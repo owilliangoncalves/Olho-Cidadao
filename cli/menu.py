@@ -416,7 +416,7 @@ def build_menu_tree() -> tuple[MenuItem, ...]:
             ),
         ),
         MenuItem(
-            title="Cidadão de Olho",
+            title="Olho Cidadão",
             description="Sobe a aplicacao publica em Loco.rs para explorar os dados em interface web.",
             preview="servir-cidadao-de-olho",
             tags=("web", "loco-rs", "publico"),
@@ -426,7 +426,7 @@ def build_menu_tree() -> tuple[MenuItem, ...]:
                 MenuItem(
                     title="Abrir ambiente publico",
                     description=(
-                        "Inicia o frontend e backend do Cidadão de Olho sobre os artefatos locais do ETL."
+                        "Inicia o frontend e backend do Olho Cidadão sobre os artefatos locais do ETL."
                     ),
                     preview="servir-cidadao-de-olho",
                     command_builder=_build_static("servir-cidadao-de-olho"),
