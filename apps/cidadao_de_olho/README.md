@@ -1,4 +1,4 @@
-# Cidadão de Olho
+# Olho Cidadão
 
 Aplicacao publica do projeto, construida com `Loco.rs` no backend e uma camada `React + Vite + Tailwind + Radix UI` no frontend.
 

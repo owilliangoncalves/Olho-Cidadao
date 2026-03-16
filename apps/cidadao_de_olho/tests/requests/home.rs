@@ -1,4 +1,4 @@
-//! Smoke tests HTTP do `Cidadão de Olho`.
+//! Smoke tests HTTP do `Olho Cidadão`.
 //!
 //! Estes testes garantem que a app sobe, entrega o HTML inicial e expõe o
 //! snapshot público com o contrato esperado.
@@ -20,7 +20,7 @@ async fn can_get_home() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.text();
-        assert!(body.contains("Cidadão de Olho"));
+        assert!(body.contains("<title>Olho Cidadão</title>"));
     })
     .await;
 }
@@ -38,7 +38,7 @@ async fn can_get_public_interface_texts() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.json::<serde_json::Value>();
-        assert_eq!(body["textos"]["visao_geral"]["rotulo_navegacao"], "Inicio");
+        assert_eq!(body["textos"]["visao_geral"]["rotulo_navegacao"], "Início");
     })
     .await;
 }
@@ -56,8 +56,11 @@ async fn can_get_snapshot() {
 
         assert_eq!(res.status_code(), 200);
         let body = res.json::<serde_json::Value>();
-        assert_eq!(body["meta"]["title"], "Cidadão de Olho");
-        assert_eq!(body["meta"]["sources"], serde_json::json!(["camara", "senado"]));
+        assert_eq!(body["meta"]["title"], "Olho Cidadão");
+        assert_eq!(
+            body["meta"]["sources"],
+            serde_json::json!(["camara", "senado"])
+        );
         assert!(body["feed"].as_array().is_some());
         assert!(body["glossario"].as_array().is_some());
         assert_eq!(body["coverage"][0]["source"], "Câmara");
