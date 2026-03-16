@@ -16,7 +16,7 @@ import { TrilhoGuia } from "../components/dashboard/TrilhoGuia";
 import { montarModeloSecaoVisaoGeral } from "../lib/montarModeloSecaoVisaoGeral";
 import type { SecaoVisaoGeralProps } from "../types";
 
-/** Renderiza a visão geral inicial do `Cidadão de Olho`. */
+/** Renderiza a visão geral inicial do `Olho Cidadão`. */
 export function SecaoVisaoGeral({
   snapshot,
   generatedAt,

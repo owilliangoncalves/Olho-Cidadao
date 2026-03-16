@@ -1,8 +1,8 @@
 [branding]
-title = "Cidadão de Olho"
+title = "Olho Cidadão"
 eyebrow = "Rede civica de monitoramento"
 headline = "Leia gasto publico como um feed social, mas com rastreabilidade e contexto."
-subheadline = "A proposta do Cidadão de Olho e transformar dados publicos fragmentados em uma experiencia acessivel para a populacao, sem esconder origem, periodo, fornecedor e tipo de despesa."
+subheadline = "A proposta do Olho Cidadão e transformar dados publicos fragmentados em uma experiencia acessivel para a populacao, sem esconder origem, periodo, fornecedor e tipo de despesa."
 refresh_label = "Atualizar leitura"
 
 [copy]

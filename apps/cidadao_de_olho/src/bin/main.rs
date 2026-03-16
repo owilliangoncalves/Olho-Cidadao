@@ -1,4 +1,4 @@
-//! Ponto de entrada do binário `Loco.rs` do `Cidadão de Olho`.
+//! Ponto de entrada do binário `Loco.rs` do `Olho Cidadão`.
 //!
 //! Este binário apenas delega ao bootstrap padrão do framework, mantendo a
 //! inicialização centralizada em `src/app.rs`.

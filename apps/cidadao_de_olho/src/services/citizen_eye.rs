@@ -1,4 +1,4 @@
-//! Orquestracao do snapshot publico do `Cidadão de Olho`.
+//! Orquestracao do snapshot publico do `Olho Cidadão`.
 //!
 //! Este módulo expõe a fachada da feature. A responsabilidade aqui é pequena
 //! por design: carregar configuracoes, delegar leitura dos artefatos ao
@@ -43,7 +43,7 @@ pub fn servico_compartilhado() -> Result<Arc<ServicoCidadaoDeOlho>> {
 }
 
 #[derive(Clone)]
-/// Fachada principal da feature `Cidadão de Olho`.
+/// Fachada principal da feature `Olho Cidadão`.
 ///
 /// Esta struct não conhece detalhes de parsing ou agregação. Ela apenas
 /// coordena as dependências internas:

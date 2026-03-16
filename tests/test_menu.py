@@ -21,7 +21,7 @@ class MenuCliTestCase(unittest.TestCase):
         titulos = [item.title for item in build_menu_tree()]
 
         self.assertIn("Pipelines", titulos)
-        self.assertIn("Cidadão de Olho", titulos)
+        self.assertIn("Olho Cidadão", titulos)
         self.assertIn("Camara", titulos)
         self.assertIn("Portal da Transparencia", titulos)
         self.assertIn("Fontes complementares", titulos)

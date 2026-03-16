@@ -18,7 +18,7 @@ use loco_rs::{
 
 use crate::controllers;
 
-/// Implementação principal do app `Cidadão de Olho` para o `Loco.rs`.
+/// Implementação principal do app `Olho Cidadão` para o `Loco.rs`.
 pub struct App;
 #[async_trait]
 impl Hooks for App {

@@ -16,7 +16,7 @@ const FALLBACK_HTML: &str = r#"<!doctype html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cidadão de Olho</title>
+    <title>Olho Cidadão</title>
     <style>
       body {
         margin: 0;
@@ -47,7 +47,7 @@ const FALLBACK_HTML: &str = r#"<!doctype html>
   </head>
   <body>
     <main>
-      <h1>Cidadão de Olho</h1>
+      <h1>Olho Cidadão</h1>
       <p>A interface publica ainda nao foi compilada.</p>
       <p>Execute <code>npm install</code> e depois <code>npm run build</code> em <code>apps/cidadao_de_olho/ui</code> para gerar a camada visual que o Loco.rs entrega em <code>/</code>.</p>
     </main>

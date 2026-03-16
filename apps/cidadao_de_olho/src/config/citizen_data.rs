@@ -1,4 +1,4 @@
-//! Configuração de leitura dos artefatos de dados do `Cidadão de Olho`.
+//! Configuração de leitura dos artefatos de dados do `Olho Cidadão`.
 //!
 //! Este módulo resolve os caminhos físicos usados pelo backend para localizar
 //! os arquivos produzidos pelo ETL. A ideia é manter a camada de serviço

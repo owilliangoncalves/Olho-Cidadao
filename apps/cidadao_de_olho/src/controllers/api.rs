@@ -1,4 +1,4 @@
-//! Endpoints JSON públicos do `Cidadão de Olho`.
+//! Endpoints JSON públicos do `Olho Cidadão`.
 //!
 //! Esta camada mantém o controller fino: recebe a requisição HTTP, delega ao
 //! serviço de domínio e serializa o contrato final como JSON.
