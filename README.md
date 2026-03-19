@@ -3,7 +3,7 @@
 Plataforma para extração, consolidação e publicação de dados
 públicos brasileiros.
 
-Este monorepo reúne:
+Este repo reúne:
 
 - um ETL em Python para fontes legislativas, orçamentárias, fiscais e de compras públicas
 - uma aplicação pública em `apps/cidadao_de_olho/`, com backend `Loco.rs` e frontend `React + Vite`
@@ -28,7 +28,7 @@ Fontes já integradas:
 - IBGE
 - ANP
 
-## Princípios do projeto
+## Funcionalidades
 
 - Crawlers retomáveis: `arquivo final + .tmp + .state.json + .empty`
 - Saída em JSON Lines para baixo uso de RAM e carga futura em banco
@@ -88,6 +88,8 @@ uv run python main.py extrair-legislaturas
 uv run python main.py extrair-dependentes --endpoint deputados_despesas --ano-inicio 2012 --ano-fim 2026
 uv run python main.py gerar-csv
 ```
+
+`gerar-csv` executa todos os geradores de CSV disponíveis sobre os dados já extraídos.
 
 Pipelines:
 
