@@ -20,7 +20,7 @@ from extracao.obrasgov.obras import ExtratorObrasGov
 from extracao.pncp.consultas import ExtratorPNCPConsulta
 from extracao.senado.senadores import ExtratorDadosSenado
 from extracao.siconfi.api import ExtratorSiconfi
-from extracao.siop.extrator_siop import ExtratorSIOP
+from extracao.siop.extrator import ExtratorSIOP
 from extracao.transferegov.recursos import ExtratorTransferegovRecursos
 from infra.errors import UserInputError
 from pipeline import PipelineCamara
