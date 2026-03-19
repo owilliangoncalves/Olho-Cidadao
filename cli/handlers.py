@@ -19,14 +19,14 @@ from extracao.pncp.consultas import ExtratorPNCPConsulta
 from extracao.portal.fornecedores import ConstrutorDimFornecedoresPortal
 from extracao.senado.senadores import ExtratorDadosSenado
 from extracao.siconfi.api import ExtratorSiconfi
-from extracao.siop.extrator_siop import ExtratorSIOP
+from extracao.siop.extrator import ExtratorSIOP
 from extracao.transferegov.recursos import ExtratorTransferegovRecursos
 from pipeline import PipelineCamara
 from pipeline_completo import PipelineCompleto
 from pipeline_paralelo import PipelineParalelo
 from pipeline_portal import PipelinePortalTransparencia
+from utils.csv.orquestrador_csv import OrquestradorGeracaoCSVs
 from utils.filtros import parse_filtros_cli
-from utils.gera_csv import ConversorDespesasCSV
 
 from .common import parse_data_iso
 
@@ -103,9 +103,9 @@ def handle_servir_cidadao_de_olho(args: argparse.Namespace):
 
 
 def handle_gerar_csv(args: argparse.Namespace):
-    """Executa a consolidação do CSV da Câmara."""
+    """Executa todos os geradores de CSV registrados no projeto."""
 
-    ConversorDespesasCSV(
+    OrquestradorGeracaoCSVs(
         data_dir=args.data_dir,
         output_dir=args.output_dir,
     ).executar()
