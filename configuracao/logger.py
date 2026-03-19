@@ -10,6 +10,9 @@ LOG_DIR = Path("logs")
 LOG_FILE = LOG_DIR / "log.log"
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 
+# Rastreia se a configuração de logging já foi realizada
+_logging_configured = False
+
 
 def _resolver_nivel() -> int:
     """Resolve o nível de log a partir da variável `LOG_LEVEL`."""
@@ -24,11 +27,12 @@ def configurar_logging() -> logging.Logger:
     O projeto usa múltiplos loggers nomeados. Por isso, a configuração é feita
     no logger raiz uma única vez, com saída em arquivo e no console.
     """
+    global _logging_configured
 
     LOG_DIR.mkdir(exist_ok=True)
     root = logging.getLogger()
 
-    if getattr(configurar_logging, "_configured", False):
+    if _logging_configured:
         root.setLevel(_resolver_nivel())
         return logging.getLogger("br_etl")
 
@@ -54,7 +58,7 @@ def configurar_logging() -> logging.Logger:
         stream_handler.setFormatter(formatter)
         root.addHandler(stream_handler)
 
-    configurar_logging._configured = True
+    _logging_configured = True
     return logging.getLogger("br_etl")
 
 

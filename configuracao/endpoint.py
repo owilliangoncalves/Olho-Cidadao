@@ -1,35 +1,30 @@
-"""Fachada enxuta para endpoints e pipelines nomeados do ETL."""
+"""
+Re-exporta funções de accessor para manter compatibilidade.
 
-from configuracao.projeto import obter_configuracao
+Originalmente este arquivo misturava acesso de endpoints e pipelines.
+Agora cada um tem seu próprio módulo com SRP:
+- endpoint.py: responsável por endpoints
+- pipeline.py: responsável por pipelines
+"""
 
-# Mantém compatibilidade com extratores mais antigos que ainda acessam o mapa
-# completo de configuração por chave, sem expor o dicionário bruto do loader.
-urls = obter_configuracao()
+from __future__ import annotations
 
+# Re-exporta para compatibilidade com código existente
+from configuracao.acessor_endpoint import (
+    obter_configuracao_endpoint,
+    obter_url_endpoint,
+)
+from configuracao.pipeline import (
+    obter_configuracao_pipeline,
+)
+from configuracao.config import exportar_configuracao_dict
 
-def obter_configuracao_endpoint(nome_endpoint: str) -> dict:
-    """Recupera a configuração de um endpoint declarado em `etl-config.toml`.
+# Para compatibilidade com código que acessa `urls` diretamente
+urls = exportar_configuracao_dict()
 
-    Args:
-        nome_endpoint: Nome lógico do endpoint no bloco `endpoints`.
-
-    Returns:
-        Dicionário de configuração associado ao endpoint.
-
-    Raises:
-        KeyError: Quando o endpoint solicitado não existe.
-    """
-
-    return obter_configuracao(f"endpoints.{nome_endpoint}")
-
-
-def obter_url_endpoint(nome_endpoint: str) -> str:
-    """Retorna apenas a URL/caminho configurado para um endpoint nomeado."""
-
-    return obter_configuracao_endpoint(nome_endpoint)["endpoint"]
-
-
-def obter_configuracao_pipeline(nome_pipeline: str) -> dict:
-    """Recupera a configuração declarativa de um pipeline em `etl-config.toml`."""
-
-    return obter_configuracao(f"pipelines.{nome_pipeline}")
+__all__ = [
+    "obter_configuracao_endpoint",
+    "obter_url_endpoint",
+    "obter_configuracao_pipeline",
+    "urls",
+]

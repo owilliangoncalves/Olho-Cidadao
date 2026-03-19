@@ -7,7 +7,7 @@ from extracao.camara.deputados_federais.dependente import ExtratorDependente
 from extracao.camara.deputados_federais.deputados import ExtratorDeputadosLegislatura
 from extracao.camara.deputados_federais.extrator_legislatura import ExtratorLegislaturas
 from infra.errors import UserInputError
-from utils.gera_csv import ConversorDespesasCSV
+from utils.csv.despesas_deputados import ConversorDespesasCSV
 
 
 class PipelineCamara:

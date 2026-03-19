@@ -71,7 +71,8 @@ uv run python main.py gerar-csv
 
 Saída:
 
-- `data/csv/despesas.csv`
+- o comando agora orquestra todos os geradores de CSV registrados
+- no fluxo da Câmara, o consolidado principal fica em `data/csv/despesas/despesas.csv`
 
 ## Estratégia do crawler
 

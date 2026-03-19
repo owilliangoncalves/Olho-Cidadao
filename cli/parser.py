@@ -23,7 +23,7 @@ def _registrar_comandos_camara(subparsers: Any):
 
     parser_csv = subparsers.add_parser(
         "gerar-csv",
-        help="Gera o arquivo CSV consolidado das despesas.",
+        help="Executa todos os geradores de CSV registrados no projeto.",
     )
     parser_csv.add_argument(
         "--data-dir",
@@ -33,7 +33,7 @@ def _registrar_comandos_camara(subparsers: Any):
     parser_csv.add_argument(
         "--output-dir",
         default=config_csv.get("output_dir"),
-        help="Onde salvar o CSV final.",
+        help="Diretório raiz onde os CSVs serão salvos.",
     )
 
     subparsers.add_parser(
