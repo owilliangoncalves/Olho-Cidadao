@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sqlite3
 from datetime import datetime
 from datetime import timezone
 from pathlib import Path
@@ -16,25 +15,16 @@ from infra.estado.arquivos import slug_segmento
 class CheckpointStore:
     """Armazena o estado de itens de trabalho em arquivos `.state.json`.
 
-    O projeto migrou de um `SQLite` local para uma estratégia única baseada em
-    artefatos de arquivo. A classe mantém a mesma interface pública para não
-    quebrar os extratores existentes e faz uma migração automática opcional de
-    checkpoints legados quando encontra `data/_estado/checkpoints.sqlite3`.
+    O projeto usa exclusivamente artefatos de arquivo para persistir estados
+    reaproveitáveis entre execuções.
     """
 
-    def __init__(
-        self,
-        base_dir: str = "data/_estado/checkpoints",
-        legacy_sqlite_path: str = "data/_estado/checkpoints.sqlite3",
-    ):
-        """Inicializa o diretório de checkpoints e migra estados legados."""
+    def __init__(self, base_dir: str = "data/_estado/checkpoints"):
+        """Inicializa o diretório de checkpoints."""
 
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
-        self.legacy_sqlite_path = Path(legacy_sqlite_path)
-        self._migration_marker = self.base_dir / ".sqlite_migrated"
         self._lock = Lock()
-        self._migrar_sqlite_legado()
 
     def _caminho_estado(self, endpoint: str, entity_id: str, context: str) -> Path:
         """Resolve o caminho do arquivo de estado de um item de trabalho."""
@@ -84,46 +74,6 @@ class CheckpointStore:
             "context": context,
         }
         salvar_estado_json(caminho, estado)
-
-    def _migrar_sqlite_legado(self):
-        """Migra checkpoints antigos do SQLite para arquivos JSON, uma vez só."""
-
-        if self._migration_marker.exists():
-            return
-        if not self.legacy_sqlite_path.exists():
-            self._migration_marker.touch()
-            return
-
-        try:
-            with sqlite3.connect(self.legacy_sqlite_path) as conn:
-                cursor = conn.execute(
-                    """
-                    SELECT endpoint, entity_id, context, status, attempts, records, pages, message, updated_at
-                    FROM work_items
-                    """
-                )
-                rows = cursor.fetchall()
-        except sqlite3.Error:
-            return
-
-        with self._lock:
-            for row in rows:
-                endpoint, entity_id, context, status, attempts, records, pages, message, updated_at = row
-                self._salvar_estado(
-                    endpoint,
-                    entity_id,
-                    context,
-                    {
-                        "status": status,
-                        "attempts": attempts,
-                        "records": records,
-                        "pages": pages,
-                        "message": message,
-                        "updated_at": updated_at,
-                    },
-                )
-
-            self._migration_marker.touch()
 
     def is_terminal(self, endpoint: str, entity_id: str, context: str) -> bool:
         """Indica se o item já chegou a um estado final reaproveitável."""

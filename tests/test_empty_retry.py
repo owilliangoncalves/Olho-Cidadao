@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from extracao.publica.base import ExtratorAPIPublicaBase
+from extracao.publica import ExtratorAPIPublicaBase
 
 
 class _ExtratorPublicoFalso(ExtratorAPIPublicaBase):

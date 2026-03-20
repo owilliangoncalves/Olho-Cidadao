@@ -57,8 +57,6 @@ class SiopClienteSPARQL:
             "Accept": f"{_MEDIA_TYPE_JSON}, application/json;q=0.9, */*;q=0.1",
         }
 
-
-
     def fazer_requisicao(
         self,
         query: str,

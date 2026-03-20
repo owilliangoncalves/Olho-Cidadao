@@ -17,8 +17,6 @@ class SiopQueryBuilder:
     def __init__(self, max_query_length: int) -> None:
         self._max_query_length = max_query_length
 
-
-
     def probe_ano(self, ano: int) -> str:
         """Sonda leve — verifica se o ano possui ao menos um ItemDespesa."""
 
@@ -126,8 +124,6 @@ class SiopQueryBuilder:
         }}
         ORDER BY ?item
         """
-
-
 
     def excede_limite_url(self, query: str) -> bool:
         """Indica se a query ultrapassa o limite seguro para requisições GET."""

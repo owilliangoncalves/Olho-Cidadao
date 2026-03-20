@@ -2,9 +2,11 @@
 
 Documentação técnica do módulo de extração da API de localidades do IBGE.
 
-Arquivo principal:
+Arquitetura:
 
-- `extracao/ibge/localidades.py`
+- `extracao/ibge/__init__.py`: orquestração pública de `LocalidadesIBGE`.
+- `extracao/ibge/config.py`: catálogo de datasets e configuração estável do pacote.
+- `extracao/ibge/tarefas.py`: resolução de datasets e caminhos de saída.
 
 ## Objetivo
 
@@ -14,6 +16,13 @@ Fornecer a camada de normalização territorial do projeto para joins entre:
 - UF
 - região
 - código IBGE
+
+## Invariantes de manutenção
+
+- toda a orquestração pública do pacote fica em `extracao/ibge/__init__.py`;
+- `config.py` e `tarefas.py` devem permanecer módulos leves, sem rede;
+- datasets inválidos são ignorados com log de warning, sem interromper o restante;
+- não há compatibilidade com o módulo antigo `extracao/ibge/localidades.py`.
 
 ## Comando
 

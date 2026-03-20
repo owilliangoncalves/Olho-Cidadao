@@ -2,6 +2,22 @@
 
 Documentação para explorar o endpoint SPARQL do **SIOP (Sistema Integrado de Planejamento e Orçamento)**.
 
+## Estrutura do pacote
+
+O pacote foi organizado com a orquestração pública em
+`extracao/siop/__init__.py`.
+
+Responsabilidades principais:
+
+- `extracao/siop/__init__.py`: orquestra anos, partições, retomada e consolidação.
+- `extracao/siop/config.py`: contrato de configuração do pacote.
+- `extracao/siop/arquivos.py`: caminhos, marcadores e escrita incremental em JSONL.
+- `extracao/siop/estado.py`: persistência e reconciliação de checkpoint.
+- `extracao/siop/paginador.py`: paginação por cursor e coleta paralela de detalhes.
+- `extracao/siop/queries.py`: montagem das consultas SPARQL.
+- `extracao/siop/transformador.py`: mapeamento de bindings para o schema de saída.
+- `extracao/siop/tarefas.py`: helpers puros de tempo e priorização de anos.
+
 O que encontramos aqui:
 
 - exploração do dataset RDF do orçamento federal

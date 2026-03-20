@@ -8,9 +8,9 @@ from typing import Any
 from typing import Dict
 from typing import Optional
 
-from configuracao.endpoint import urls
+from configuracao import urls
 from configuracao.logger import logger
-from configuracao.projeto import obter_configuracao
+from configuracao import obter_configuracao
 from infra.http.cliente import http_client
 
 class ExtratorBase(ABC):

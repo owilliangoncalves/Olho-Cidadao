@@ -1,7 +1,8 @@
+"""Modelos tipados que representam o schema de configuração do projeto."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
 from typing import Any
 
 
@@ -11,24 +12,28 @@ class EndpointConfig:
     depende_de: str | None = None
     itens: int = 500
     campo_id: str = "id"
+    salvar_como: str | None = None
+    paginacao: bool = False
+    ano_inicio: int | None = None
+    ano_fim: int | None = None
+    restricted: bool | None = None
+    fases: list[int] = field(default_factory=list)
 
 
 @dataclass(slots=True)
 class PipelineConfig:
     etapas: list[str] = field(default_factory=list)
     descricao: str | None = None
-
-
-@dataclass(slots=True)
-class CliIntervaloAnosConfig:
-    inicio: date | str | None = None
-    fim: date | str | None = None
-
-
-@dataclass(slots=True)
-class CliConfig:
-    intervalo_anos: CliIntervaloAnosConfig = field(default_factory=CliIntervaloAnosConfig)
-    comandos: dict[str, dict[str, Any]] = field(default_factory=dict)
+    ano_inicio: int | None = None
+    ano_fim: int | None = None
+    max_workers: int | None = None
+    fontes: dict[str, bool] = field(default_factory=dict)
+    portal: dict[str, Any] = field(default_factory=dict)
+    senado: dict[str, Any] = field(default_factory=dict)
+    ibge: dict[str, Any] = field(default_factory=dict)
+    pncp: dict[str, Any] = field(default_factory=dict)
+    siconfi: dict[str, Any] = field(default_factory=dict)
+    anp: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(slots=True)

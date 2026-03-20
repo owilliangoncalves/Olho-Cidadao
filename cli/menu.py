@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Callable
 
 from configuracao.logger import LOG_FILE
-from configuracao.projeto import obter_intervalo_anos_padrao
-from configuracao.projeto import obter_parametros_cli
+from configuracao import obter_intervalo_anos_padrao
+from configuracao import obter_parametros_cli
 
 _RESET = "\033[0m"
 _BOLD = "\033[1m"

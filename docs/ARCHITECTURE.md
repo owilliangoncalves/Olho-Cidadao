@@ -17,25 +17,24 @@ O projeto segue uma arquitetura em camadas:
 Arquivos principais:
 
 - `main.py`
-- `cli/app.py`
-- `cli/parser.py`
-- `cli/handlers.py`
-- `cli/common.py`
-- `pipeline.py`
-- `pipeline_paralelo.py`
-- `pipeline_portal.py`
+- `cli/__init__.py`
+- `cli/comun.py`
+- `cli/menu.py`
+- `pipeline/__init__.py`
+- `pipeline/config.py`
+- `pipeline/tarefas.py`
 
 Responsabilidades:
 
 - expor comandos ao usuario
 - validar argumentos
-- separar parsing, wiring e handlers
+- concentrar parser, wiring e handlers publicos em um unico ponto
 - disparar pipelines ou extratores independentes
 
 Observação:
 
 - `main.py` e apenas um ponto de entrada enxuto
-- a montagem da CLI foi modularizada no pacote `cli/`
+- `cli/__init__.py` e a fachada unica da CLI
 
 Pipeline completo:
 
@@ -74,8 +73,9 @@ Local:
 - `infra/http/`
 - `infra/estado/`
 - `infra/concorrencia.py`
-- `configuracao/projeto.py`
-- `configuracao/endpoint.py`
+- `configuracao/__init__.py`
+- `configuracao/acesso.py`
+- `configuracao/carregador.py`
 
 Responsabilidades:
 
@@ -114,7 +114,7 @@ Isso permite:
 
 - retomar sem recomeçar a execução inteira
 - evitar duplicação de saída
-- reaproveitar arquivos já compatíveis com o esquema atual
+- reaproveitar artefatos íntegros já produzidos na estrutura atual
 
 ## Estratégia de crawler
 

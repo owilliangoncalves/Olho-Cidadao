@@ -23,8 +23,8 @@ Indice central da documentacao modular do projeto.
 
 ## Camada de entrada
 
-- `main.py` e o ponto de entrada publico da CLI
-- `cli/` concentra parser, handlers e bootstrap da interface de linha de comando
+- `main.py` e apenas o ponto de entrada publico da CLI
+- `cli/__init__.py` concentra parser, handlers e bootstrap da interface de linha de comando
 - `etl-config.toml` e a fonte de verdade da configuracao operacional do ETL
 - `rodar-pipeline-completo` resolve parametros com precedencia `CLI -> [pipelines.completo]` em [etl-config.toml](../etl-config.toml)
 - `rodar-pipeline` e `rodar-paralelo` também delegam seus defaults operacionais ao `etl-config.toml`, em vez de embutirem anos, fontes ou janelas de datas no codigo
@@ -35,6 +35,7 @@ Indice central da documentacao modular do projeto.
 - As extracoes novas persistem preferencialmente em JSON Lines.
 - A estrategia de retomada do projeto e baseada em arquivos:
   `arquivo final + .tmp + .state.json + .empty`, conforme a natureza do endpoint.
+- A persistencia de checkpoints usa apenas arquivos `.state.json`; nao ha camada paralela em SQLite.
 - Nos conectores mais recentes, cada linha tende a seguir o envelope:
 
 ```json

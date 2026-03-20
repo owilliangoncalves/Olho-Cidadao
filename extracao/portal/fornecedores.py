@@ -6,10 +6,25 @@ from collections import Counter
 from pathlib import Path
 
 from configuracao.logger import logger
-from configuracao.projeto import obter_parametros_extrator
+from extracao.portal.config import PORTAL_FORNECEDORES_PATH
+from extracao.portal.config import PortalFornecedoresConfig
 from utils.documentos import base_cnpj
 from utils.documentos import normalizar_documento
 from utils.documentos import tipo_documento
+
+
+def _iterar_jsonl(arquivos):
+    """Itera linhas JSON válidas de um conjunto de arquivos JSON Lines."""
+
+    for arquivo in arquivos:
+        with open(arquivo, encoding="utf-8") as f:
+            for linha in f:
+                if not linha.strip():
+                    continue
+                try:
+                    yield json.loads(linha)
+                except json.JSONDecodeError:
+                    continue
 
 
 class ConstrutorDimFornecedoresPortal:
@@ -22,7 +37,7 @@ class ConstrutorDimFornecedoresPortal:
 
     def __init__(
         self,
-        output_path: str = "data/portal_transparencia/dimensoes/fornecedores.jsonl",
+        output_path: str | Path = PORTAL_FORNECEDORES_PATH,
     ):
         """Define onde a dimensão consolidada será persistida."""
 
@@ -54,22 +69,13 @@ class ConstrutorDimFornecedoresPortal:
         if not caminho.exists():
             return
 
-        for arquivo in sorted(caminho.glob("**/*.json")):
-            with open(arquivo, encoding="utf-8") as f:
-                for linha in f:
-                    if not linha.strip():
-                        continue
-                    try:
-                        row = json.loads(linha)
-                    except json.JSONDecodeError:
-                        continue
-
-                    yield {
-                        "documento": row.get("cnpjCpfFornecedor"),
-                        "nome": row.get("nomeFornecedor"),
-                        "ano": row.get("ano"),
-                        "origem": "camara",
-                    }
+        for row in _iterar_jsonl(sorted(caminho.glob("**/*.json"))):
+            yield {
+                "documento": row.get("cnpjCpfFornecedor"),
+                "nome": row.get("nomeFornecedor"),
+                "ano": row.get("ano"),
+                "origem": "camara",
+            }
 
     def _iterar_senado(self):
         """Lê fornecedores presentes nos arquivos anuais do Senado."""
@@ -83,26 +89,17 @@ class ConstrutorDimFornecedoresPortal:
 
         for arquivo in sorted(caminho.glob("ceaps_*.json")):
             ano_arquivo = arquivo.stem.split("_")[-1]
+            for row in _iterar_jsonl((arquivo,)):
+                nome = next((row.get(chave) for chave in nome_keys if row.get(chave)), None)
+                documento = next((row.get(chave) for chave in doc_keys if row.get(chave)), None)
+                ano = row.get("ano") or ano_arquivo
 
-            with open(arquivo, encoding="utf-8") as f:
-                for linha in f:
-                    if not linha.strip():
-                        continue
-                    try:
-                        row = json.loads(linha)
-                    except json.JSONDecodeError:
-                        continue
-
-                    nome = next((row.get(chave) for chave in nome_keys if row.get(chave)), None)
-                    documento = next((row.get(chave) for chave in doc_keys if row.get(chave)), None)
-                    ano = row.get("ano") or ano_arquivo
-
-                    yield {
-                        "documento": documento,
-                        "nome": nome,
-                        "ano": ano,
-                        "origem": "senado",
-                    }
+                yield {
+                    "documento": documento,
+                    "nome": nome,
+                    "ano": ano,
+                    "origem": "senado",
+                }
 
     def _iterar_registros(self):
         """Itera os registros de fornecedores a partir das fontes locais disponíveis."""
@@ -129,12 +126,7 @@ class ConstrutorDimFornecedoresPortal:
             Caminho do arquivo JSON Lines gerado.
         """
 
-        config_portal = obter_parametros_extrator("portal.fornecedores")
-        min_ocorrencias = (
-            min_ocorrencias
-            if min_ocorrencias is not None
-            else config_portal.get("min_ocorrencias")
-        )
+        cfg = PortalFornecedoresConfig.carregar(min_ocorrencias=min_ocorrencias)
         fornecedores = {}
 
         for row in self._iterar_registros():
@@ -170,7 +162,7 @@ class ConstrutorDimFornecedoresPortal:
         registros = []
 
         for fornecedor in fornecedores.values():
-            if fornecedor["total_ocorrencias"] < min_ocorrencias:
+            if fornecedor["total_ocorrencias"] < cfg.min_ocorrencias:
                 continue
 
             nomes_ordenados = fornecedor["nomes"].most_common()

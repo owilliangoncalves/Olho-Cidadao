@@ -4,18 +4,14 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime, timezone
 from pathlib import Path
 
 from utils.jsonl import contar_registros_jsonl
 
 from extracao.siop.arquivos import SiopArquivos
+from extracao.siop.tarefas import agora_iso
 
 logger = logging.getLogger(__name__)
-
-
-def _agora_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
 
 
 class SiopEstadoRepositorio:
@@ -52,7 +48,7 @@ class SiopEstadoRepositorio:
     # ── leitura e escrita ────────────────────────────────────────────────────
 
     def carregar(self, ano: int, funcao_codigo: str) -> dict:
-        """Lê o estado salvo da partição, aceitando arquivos legados."""
+        """Lê o estado salvo da partição."""
 
         estado = self.inicial()
         caminho = self._arquivos.estado_particao(ano, funcao_codigo)
@@ -134,7 +130,7 @@ class SiopEstadoRepositorio:
 
         estado["status"] = status
         estado["message"] = message
-        estado["updated_at"] = _agora_iso()
+        estado["updated_at"] = agora_iso()
         self.salvar(ano, funcao_codigo, estado)
 
     # ── helper interno ───────────────────────────────────────────────────────

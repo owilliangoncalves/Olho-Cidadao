@@ -15,10 +15,7 @@ class CheckpointStoreTestCase(unittest.TestCase):
 
         with TemporaryDirectory() as tmp:
             base_dir = Path(tmp) / "checkpoints"
-            store = CheckpointStore(
-                base_dir=str(base_dir),
-                legacy_sqlite_path=str(Path(tmp) / "legacy.sqlite3"),
-            )
+            store = CheckpointStore(base_dir=str(base_dir))
 
             store.mark_running("demo", "123", "2025")
             store.mark_success("demo", "123", "2025", records=10, pages=2)
@@ -34,10 +31,7 @@ class CheckpointStoreTestCase(unittest.TestCase):
         """Estados finais diferentes devem ser refletidos corretamente."""
 
         with TemporaryDirectory() as tmp:
-            store = CheckpointStore(
-                base_dir=f"{tmp}/checkpoints",
-                legacy_sqlite_path=f"{tmp}/legacy.sqlite3",
-            )
+            store = CheckpointStore(base_dir=f"{tmp}/checkpoints")
 
             store.mark_empty("demo", "999", "2024", pages=0)
             self.assertEqual(store.get_status("demo", "999", "2024"), "empty")

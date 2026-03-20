@@ -4,12 +4,12 @@ Documentação técnica do módulo de enriquecimento via Portal da Transparênci
 
 Arquivos principais:
 
+- `pipeline/__init__.py`
+- `extracao/portal/__init__.py`
 - `extracao/portal/base.py`
+- `extracao/portal/config.py`
 - `extracao/portal/fornecedores.py`
-- `extracao/portal/documentos_favorecido.py`
-- `extracao/portal/sancoes.py`
-- `extracao/portal/notas_fiscais.py`
-- `pipeline_portal.py`
+- `extracao/portal/tarefas.py`
 
 ## Objetivo
 
@@ -83,10 +83,12 @@ Saída:
 O módulo do Portal reaproveita:
 
 - `extracao/portal/base.py` para autenticação, rate limit oficial e retomada paginada
+- `extracao/portal/tarefas.py` para regras puras de filtros, status e caminhos
+- `extracao/portal/config.py` para defaults operacionais e limites de execução
 - `infra/estado/arquivos.py` para derivacao de `.tmp`, `.state.json` e `.empty`
 - `infra/concorrencia.py` para execução paralela com backpressure e contadores thread-safe
 
-Com isso, `documentos_favorecido`, `sancoes` e `notas_fiscais` deixaram de manter implementações quase iguais de controle de futures e estatisticas.
+Com isso, a API pública do pacote fica concentrada em `extracao.portal`, enquanto `base.py`, `config.py`, `tarefas.py` e `fornecedores.py` permanecem como módulos internos menores e mais estáveis.
 
 ## Campos importantes para joins
 

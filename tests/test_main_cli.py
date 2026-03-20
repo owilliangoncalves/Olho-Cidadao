@@ -8,9 +8,9 @@ from contextlib import redirect_stdout
 from datetime import date
 from io import StringIO
 
-from main import build_parser
+from cli import build_parser
+from cli import parse_data_iso
 from main import main
-from main import parse_data_iso
 
 
 class MainCliTestCase(unittest.TestCase):

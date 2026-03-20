@@ -1,10 +1,13 @@
 # ObrasGov
 
-Documentacão técnica do módulo de extração do ObrasGov.
+Documentacão técnica do pacote de extração do ObrasGov.
 
-Arquivo principal:
+Arquitetura:
 
-- `extracao/obrasgov/obras.py`
+- `extracao/obrasgov/__init__.py`: orquestração pública de `ObrasGov`.
+- `extracao/obrasgov/config.py`: configuração estável e catálogo de recursos paginados.
+- `extracao/obrasgov/projetos.py`: leitura local de projetos e `slug_id`.
+- `extracao/obrasgov/tarefas.py`: caminhos de saída, validação de recursos e mapeamento de status.
 
 ## Objetivo
 
@@ -14,6 +17,13 @@ Capturar a camada física e financeira de investimentos em infraestrutura, espec
 - obra
 - executor
 - geografia
+
+## Invariantes de manutenção
+
+- toda a orquestração pública do pacote fica em `extracao/obrasgov/__init__.py`;
+- `config.py`, `projetos.py` e `tarefas.py` permanecem módulos auxiliares sem orquestração;
+- recursos inválidos são ignorados com log de warning, sem interromper os válidos;
+- não há compatibilidade com o módulo antigo `extracao/obrasgov/obras.py`.
 
 ## Recursos suportados
 

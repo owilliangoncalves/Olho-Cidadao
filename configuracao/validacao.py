@@ -1,12 +1,13 @@
+"""Validação tipada do `etl-config.toml` e construção do schema do projeto."""
+
 from __future__ import annotations
 
 from dataclasses import fields, is_dataclass
 from datetime import date
-from typing import Any, TypeVar, cast, get_args, get_origin
+from typing import Any, TypeVar, cast, get_args, get_origin, get_type_hints
 
 from configuracao.excecoes import ConfiguracaoInvalida
 from configuracao.modelos import (
-    CliIntervaloAnosConfig,
     ConfigOperacional,
     EndpointConfig,
     PipelineConfig,
@@ -43,8 +44,7 @@ def _validar_tipo_basico(valor: Any, tipo_esperado: Any, caminho: str) -> Any:
                 raise ConfiguracaoInvalida(
                     f"Campo '{caminho}' deve ser um objeto/dict, recebido: {type(valor).__name__}."
                 )
-            # tipo_esperado é Any, mas we know it's a dataclass type
-            return construir_dataclass(cast(type[Any], tipo_esperado), valor, caminho) 
+            return construir_dataclass(cast(type[Any], tipo_esperado), valor, caminho)
 
         if not isinstance(valor, tipo_esperado):
             raise ConfiguracaoInvalida(
@@ -107,59 +107,62 @@ def construir_dataclass(cls: type[T], data: dict[str, Any], caminho: str = "root
         )
 
     kwargs: dict[str, Any] = {}
+    type_hints = get_type_hints(cls)
     for f in fields(cast(Any, cls)):
         if f.name not in data:
             continue
-        kwargs[f.name] = _validar_tipo_basico(data[f.name], f.type, f"{caminho}.{f.name}")
+        tipo_campo = type_hints.get(f.name, f.type)
+        kwargs[f.name] = _validar_tipo_basico(data[f.name], tipo_campo, f"{caminho}.{f.name}")
 
     obj: T = cls(**kwargs)  # type: ignore[assignment]
 
-    # Type narrowing: usar isinstance para validação, não para type checking
     if isinstance(obj, EndpointConfig):
         validar_endpoint(obj, caminho)
     elif isinstance(obj, PipelineConfig):
         validar_pipeline(obj, caminho)
-    elif isinstance(obj, CliIntervaloAnosConfig):
-        validar_intervalo_anos(obj, caminho)
 
     return obj
 
 
 def validar_endpoint(cfg: EndpointConfig, caminho: str) -> None:
-    # cfg.endpoint já é str por contrato de dataclass, cfg.itens é int, cfg.campo_id é str
     if not cfg.endpoint:
         raise ConfiguracaoInvalida(f"'{caminho}.endpoint' deve ser uma string não vazia.")
     if cfg.itens <= 0:
         raise ConfiguracaoInvalida(f"'{caminho}.itens' deve ser maior que zero.")
     if not cfg.campo_id.strip():
         raise ConfiguracaoInvalida(f"'{caminho}.campo_id' não pode ser vazio.")
+    if cfg.salvar_como is not None and not cfg.salvar_como.strip():
+        raise ConfiguracaoInvalida(f"'{caminho}.salvar_como' não pode ser vazio.")
+    if cfg.ano_inicio is not None and cfg.ano_fim is not None and cfg.ano_inicio > cfg.ano_fim:
+        raise ConfiguracaoInvalida(f"'{caminho}' deve ter ano_inicio <= ano_fim.")
+    if any(not isinstance(fase, int) for fase in cfg.fases):
+        raise ConfiguracaoInvalida(f"'{caminho}.fases' deve conter apenas inteiros.")
 
 
 def validar_pipeline(cfg: PipelineConfig, caminho: str) -> None:
-    # cfg.etapas já é list[str] por contrato de dataclass
     if any(not etapa.strip() for etapa in cfg.etapas):
         raise ConfiguracaoInvalida(f"'{caminho}.etapas' deve conter apenas strings não vazias.")
+    if cfg.max_workers is not None and cfg.max_workers <= 0:
+        raise ConfiguracaoInvalida(f"'{caminho}.max_workers' deve ser maior que zero.")
+    if cfg.ano_inicio is not None and cfg.ano_fim is not None and cfg.ano_inicio >= cfg.ano_fim:
+        raise ConfiguracaoInvalida(f"'{caminho}' deve ter ano_inicio < ano_fim.")
 
 
-def validar_intervalo_anos(cfg: CliIntervaloAnosConfig, caminho: str) -> None:
-    # cfg.inicio e cfg.fim já são date | str | None por contrato de dataclass
-    for nome, valor in (("inicio", cfg.inicio), ("fim", cfg.fim)):
-        if valor is not None:
-            # Type narrowing: valor é date | str aqui
-            pass
+def _obter_tabela(dados: Any, chave: str) -> dict[str, Any]:
+    """Lê uma tabela TOML obrigatoriamente como `dict`."""
+
+    valor = dados.get(chave, {}) if isinstance(dados, dict) else {}
+    if not isinstance(valor, dict):
+        raise ConfiguracaoInvalida(f"'{chave}' deve ser uma tabela TOML.")
+    return valor
 
 
 def construir_config_projeto(raw: dict[str, Any]) -> ProjetoConfig:
-    # Extract and typenar em uma única passagem
-    def _get_dict(d: Any, key: str) -> dict[str, Any]:
-        value = d.get(key, {}) if isinstance(d, dict) else {}
-        if not isinstance(value, dict):
-            raise ConfiguracaoInvalida(f"'{key}' deve ser uma tabela TOML.")
-        return value
+    """Constrói o objeto tipado raiz do projeto a partir do TOML cru."""
 
-    endpoints_raw = _get_dict(raw, "endpoints")
-    pipelines_raw = _get_dict(raw, "pipelines")
-    config_raw = _get_dict(raw, "config")
+    endpoints_raw = _obter_tabela(raw, "endpoints")
+    pipelines_raw = _obter_tabela(raw, "pipelines")
+    config_raw = _obter_tabela(raw, "config")
 
     endpoints: dict[str, EndpointConfig] = {
         nome: construir_dataclass(EndpointConfig, valor, f"endpoints.{nome}")
@@ -171,9 +174,9 @@ def construir_config_projeto(raw: dict[str, Any]) -> ProjetoConfig:
         for nome, valor in pipelines_raw.items()
     }
 
-    cli_cfg = _get_dict(config_raw, "cli")
-    extratores_cfg = _get_dict(config_raw, "extratores")
-    pipelines_cfg = _get_dict(config_raw, "pipelines")
+    cli_cfg = _obter_tabela(config_raw, "cli")
+    extratores_cfg = _obter_tabela(config_raw, "extratores")
+    pipelines_cfg = _obter_tabela(config_raw, "pipelines")
 
     config = ConfigOperacional(
         cli=cli_cfg,

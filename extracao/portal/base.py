@@ -9,7 +9,8 @@ from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
-from configuracao.projeto import obter_parametros_extrator
+from extracao.portal.config import PORTAL_STATE_ROOT
+from extracao.portal.config import PortalAPIConfig
 from extracao.extrator_da_base import ExtratorBase
 from infra.errors import UserInputError
 from infra.estado.arquivos import carregar_estado_json
@@ -21,8 +22,6 @@ from infra.http.sessao import criar_sessao
 from utils.documentos import base_cnpj
 from utils.documentos import tipo_documento
 from utils.jsonl import arquivo_jsonl_meta_tem_chaves
-
-load_dotenv()
 
 
 class ExtratorPortalBase(ExtratorBase):
@@ -37,16 +36,17 @@ class ExtratorPortalBase(ExtratorBase):
         """Inicializa a sessão direta e valida a presença da chave da API."""
 
         super().__init__("portal_transparencia")
+        load_dotenv()
 
-        api_config = obter_parametros_extrator("portal.api")
+        api_config = PortalAPIConfig.carregar()
         self.nome_endpoint = nome_endpoint
         self.restricted = restricted
         self._local = local()
         self.no_proxy = {"http": None, "https": None}
-        self.restricted_limit_rpm = api_config.get("restricted_limit_rpm")
-        self.day_limit_rpm = api_config.get("day_limit_rpm")
-        self.night_limit_rpm = api_config.get("night_limit_rpm")
-        self.default_timezone = api_config.get("timezone")
+        self.restricted_limit_rpm = api_config.restricted_limit_rpm
+        self.day_limit_rpm = api_config.day_limit_rpm
+        self.night_limit_rpm = api_config.night_limit_rpm
+        self.default_timezone = api_config.timezone
         self.api_key = (
             os.getenv("PORTAL_TRANSPARENCIA_API_KEY")
             or os.getenv("CHAVE_API_DADOS")
@@ -130,35 +130,6 @@ class ExtratorPortalBase(ExtratorBase):
                     return valor
         return []
 
-    def _caminhos_tarefa(self, relative_output_path: Path):
-        """Deriva caminhos final, temporário, vazio e de estado da tarefa."""
-
-        return derivar_artefatos_tarefa(
-            relative_output_path,
-            state_root=Path("data/_estado/portal"),
-        )
-
-    def _carregar_estado(self, state_path: Path) -> dict:
-        """Lê o estado atual de paginação da tarefa."""
-
-        return carregar_estado_json(state_path, {"page": 1, "records": 0})
-
-    def _salvar_estado(self, state_path: Path, page: int, records: int):
-        """Persiste o avanço de paginação da tarefa atual."""
-
-        salvar_estado_json(
-            state_path,
-            {
-                "page": page,
-                "records": records,
-            },
-        )
-
-    def _limpar_estado(self, state_path: Path, tmp_path: Path):
-        """Remove artefatos intermediários após sucesso ou vazio definitivo."""
-
-        limpar_artefatos(state_path, tmp_path)
-
     def _executar_tarefa_paginada(
         self,
         endpoint: str,
@@ -174,7 +145,10 @@ class ExtratorPortalBase(ExtratorBase):
         metadados mínimos para rastrear a origem da consulta.
         """
 
-        output_path, state_path, tmp_path, empty_path = self._caminhos_tarefa(relative_output_path)
+        output_path, state_path, tmp_path, empty_path = derivar_artefatos_tarefa(
+            relative_output_path,
+            state_root=PORTAL_STATE_ROOT,
+        )
         documento_contexto = context.get("documento")
         output_join_ready = arquivo_jsonl_meta_tem_chaves(output_path, self.required_meta_keys)
         retrying_from_empty = _from_empty_retry
@@ -191,7 +165,7 @@ class ExtratorPortalBase(ExtratorBase):
             else:
                 return {"status": "skipped_empty", "records": 0, "pages": 0, "path": output_path}
 
-        state = self._carregar_estado(state_path)
+        state = carregar_estado_json(state_path, {"page": 1, "records": 0})
         if state["page"] > 1 and not tmp_path.exists():
             state = {"page": 1, "records": 0}
 
@@ -241,10 +215,10 @@ class ExtratorPortalBase(ExtratorBase):
                 f.flush()
                 pages_written += 1
                 page += 1
-                self._salvar_estado(state_path, page, total_records)
+                salvar_estado_json(state_path, {"page": page, "records": total_records})
 
         if total_records == 0:
-            self._limpar_estado(state_path, tmp_path)
+            limpar_artefatos(state_path, tmp_path)
             if not retrying_from_empty and _allow_empty_retry and self._consumir_retry_empty(
                 empty_path,
                 contexto=f"{self.nome_endpoint}:{relative_output_path}",

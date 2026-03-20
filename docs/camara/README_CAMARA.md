@@ -1,14 +1,15 @@
 # Câmara dos Deputados
 
-Documentação técnica do módulo de extracao da Câmara.
+Documentação técnica do pacote de extração da Câmara.
 
-Arquivos principais:
+Arquitetura:
 
-- `extracao/camara/deputados_federais/extrator_legislatura.py`
-- `extracao/camara/deputados_federais/deputados.py`
-- `extracao/camara/deputados_federais/dependente.py`
-- `extracao/camara/deputados_federais/camara.py`
-- `pipeline.py`
+- `extracao/camara/deputados_federais/__init__.py`: orquestração pública de `Legislatura`, `DeputadosLegislatura` e `Despesas`.
+- `extracao/camara/deputados_federais/config.py`: configuração operacional e contratos mínimos de saída.
+- `extracao/camara/deputados_federais/artefatos.py`: convenções de caminhos para `final/tmp/empty/state`.
+- `extracao/camara/deputados_federais/dados.py`: leitura de JSONL, recorte temporal e enriquecimento de despesas.
+- `extracao/camara/deputados_federais/paginado.py`: loop paginado com retomada e persistência incremental.
+- `pipeline/__init__.py`: pipeline sequencial da Câmara e demais orquestrações públicas.
 
 ## Objetivo
 
@@ -18,6 +19,14 @@ Extrair a cadeia base da Câmara:
 2. deputados por legislatura
 3. despesas por deputado e por ano
 4. consolidacao em CSV
+
+## Invariantes de manutenção
+
+- toda a orquestração pública do pacote fica em `extracao/camara/deputados_federais/__init__.py`;
+- `config.py`, `artefatos.py`, `dados.py` e `paginado.py` devem permanecer módulos auxiliares sem orquestração;
+- os três fluxos usam o mesmo protocolo de retomada: arquivo final, `.tmp`, `.empty` e `.state.json`;
+- o fluxo de despesas continua deduplicando por `(deputado, ano)` e priorizando legislaturas mais recentes;
+- não há compatibilidade com os módulos antigos removidos do pacote.
 
 ## Fluxo
 
@@ -113,7 +122,7 @@ Nos arquivos de despesas:
 - parlamentar: `id_deputado`
 - recorte institucional: `id_legislatura`, `sigla_uf_deputado`, `sigla_partido_deputado`
 
-## Pipeline completa
+## Pipeline
 
 ```bash
 uv run python main.py rodar-pipeline

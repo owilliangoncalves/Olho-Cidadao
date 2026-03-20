@@ -2,9 +2,13 @@
 
 Documentação técnica do módulo de extracao da API de dados abertos do Siconfi.
 
-Arquivo principal:
+Arquivos principais:
 
-- `extracao/siconfi/api.py`
+- `extracao/siconfi/__init__.py`
+- `extracao/siconfi/config.py`
+- `extracao/siconfi/specs.py`
+- `extracao/siconfi/filtros.py`
+- `extracao/siconfi/tarefas.py`
 
 ## Objetivo
 
@@ -42,6 +46,14 @@ Quando os recursos exigirem filtros diferentes, prefira comandos separados. Um u
 - preservação do payload bruto do Siconfi
 - validação local dos filtros obrigatórios por recurso, antes da primeira request
 - normalizacao de aliases comuns como `exercício -> an_referencia` e `cod_ibge -> id_ente`
+
+## Organização
+
+- `extracao.siconfi` expõe a orquestração pública `Siconfi`
+- `config.py` concentra paginação e limites da API
+- `specs.py` mantém o catálogo declarativo dos recursos
+- `filtros.py` normaliza e valida contratos de filtros
+- `tarefas.py` isola caminhos de saída e seleção final de recursos
 
 ## Filtros obrigatórios por recurso
 

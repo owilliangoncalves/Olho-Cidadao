@@ -9,9 +9,8 @@ Este repo reúne:
 - uma aplicação pública em `apps/cidadao_de_olho/`, com backend `Loco.rs` e frontend `React + Vite`
 - documentação modular por fonte, com foco em rastreabilidade operacional e evolução incremental
 
-Na camada de entrada do ETL, `main.py` funciona como wrapper enxuto e a CLI
-foi modularizada em `cli/` para separar parser, handlers e utilitários
-compartilhados.
+Na camada de entrada do ETL, `main.py` funciona como wrapper enxuto e a
+orquestração pública da CLI fica concentrada em `cli/__init__.py`.
 
 ## Escopo atual
 
@@ -35,7 +34,7 @@ Fontes já integradas:
 - Prioridade para reprocessamento idempotente e rastreabilidade
 - Camada HTTP compartilhada com retry, backoff e rate limiting
 - Organização por domínio, com documentação técnica por módulo
-- CLI modularizada e infraestrutura compartilhada para concorrência e retomada
+- CLI centralizada e infraestrutura compartilhada para concorrência e retomada
 
 ## Componentes principais
 
@@ -197,9 +196,7 @@ Exemplos:
 ├── utils/
 ├── etl-config.toml
 ├── main.py
-├── pipeline.py
-├── pipeline_paralelo.py
-├── pipeline_portal.py
+├── pipeline/
 └── pyproject.toml
 ```
 

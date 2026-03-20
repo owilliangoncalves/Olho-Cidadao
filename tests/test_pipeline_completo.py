@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 from infra.errors import UserInputError
-from pipeline_completo import PipelineCompleto
+from pipeline import PipelineCompleto
 
 
 class PipelineCompletoTestCase(unittest.TestCase):
@@ -43,24 +43,24 @@ class PipelineCompletoTestCase(unittest.TestCase):
 
         with patch.dict("os.environ", {"PORTAL_TRANSPARENCIA_API_KEY": "dummy"}, clear=True):
             with patch(
-                "pipeline_completo.PipelineParalelo.executar",
+                "pipeline.PipelineParalelo.executar",
                 autospec=True,
                 side_effect=lambda self: chamadas.append("paralelo"),
             ):
                 with patch(
-                    "pipeline_completo.PipelinePortalTransparencia.executar",
+                    "pipeline.PipelinePortalTransparencia.executar",
                     autospec=True,
                     side_effect=lambda self: chamadas.append("portal"),
                 ):
                     with patch(
-                        "pipeline_completo.ExtratorRevendedoresANP.executar",
+                        "pipeline.RevendedoresANP.executar",
                         autospec=True,
                         side_effect=lambda self, datasets=None: chamadas.append(
                             ("anp", tuple(datasets or []))
                         ),
                     ):
                         with patch(
-                            "pipeline_completo.ExtratorObrasGov",
+                            "pipeline.ObrasGov",
                             return_value=mock_obrasgov,
                         ):
                             PipelineCompleto().executar()

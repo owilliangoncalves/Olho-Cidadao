@@ -1,10 +1,12 @@
 # PNCP
 
-Documentação técnica do módulo de extração da consulta pública do PNCP.
+Documentação técnica do pacote de extração da consulta pública do PNCP.
 
-Arquivo principal:
+Arquitetura:
 
-- `extracao/pncp/consultas.py`
+- `extracao/pncp/__init__.py`: orquestração pública de `PNCPConsulta`.
+- `extracao/pncp/config.py`: configuração estável e catálogo de recursos mensais.
+- `extracao/pncp/tarefas.py`: janelas mensais, anos e caminhos de saída.
 
 ## Objetivo
 
@@ -15,6 +17,13 @@ Extrair:
 - PCA
 
 para posterior correlação com fornecedores que aparecem em gastos parlamentares e outras bases.
+
+## Invariantes de manutenção
+
+- toda a orquestração pública do pacote fica em `extracao/pncp/__init__.py`;
+- `config.py` e `tarefas.py` devem permanecer módulos leves, sem rede;
+- contratos e atas seguem janelas mensais; PCA segue corte anual;
+- não há compatibilidade com o módulo antigo `extracao/pncp/consultas.py`.
 
 ## Comando
 

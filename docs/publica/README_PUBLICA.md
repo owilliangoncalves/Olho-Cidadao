@@ -2,9 +2,12 @@
 
 Documentação da infraestrutura compartilhada usada pelos conectores mais novos do projeto.
 
-Arquivo principal:
+Arquivos principais:
 
-- `extracao/publica/base.py`
+- `extracao/publica/__init__.py`
+- `extracao/publica/config.py`
+- `extracao/publica/artefatos.py`
+- `extracao/publica/records.py`
 
 ## Objetivo
 
@@ -85,7 +88,7 @@ Essa infraestrutura fica em `infra/concorrencia.py` e e reutilizada por módulos
 
 ## Quando usar essa base
 
-Use `ExtratorAPIPublicaBase` para novas integrações que:
+Use `ExtratorAPIPublicaBase` via `extracao.publica` para novas integrações que:
 
 - exponham JSON;
 - tenham volume paginado;

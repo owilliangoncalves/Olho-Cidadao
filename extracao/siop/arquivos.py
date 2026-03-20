@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Generator
+from typing import Iterable
 
 from utils.jsonl import arquivo_jsonl_tem_chaves
 
@@ -47,6 +47,24 @@ class SiopArquivos:
         self._base = Path("data") / caminho_salvo
         self._estado_dir = estado_dir
 
+    @property
+    def base_dir(self) -> Path:
+        """Diretório base de saída do pacote."""
+
+        return self._base
+
+    @property
+    def state_dir(self) -> Path:
+        """Diretório onde os checkpoints das partições são persistidos."""
+
+        return self._estado_dir
+
+    @staticmethod
+    def _marcador(caminho: Path, suffix: str) -> Path:
+        """Deriva um arquivo marcador a partir do arquivo final."""
+
+        return caminho.with_suffix(caminho.suffix + suffix)
+
     # ── caminhos anuais ──────────────────────────────────────────────────────
 
     def saida_ano(self, ano: int) -> Path:
@@ -54,10 +72,10 @@ class SiopArquivos:
         return self._base / f"orcamento_item_despesa_{ano}.jsonl"
 
     def tmp_ano(self, ano: int) -> Path:
-        return self.saida_ano(ano).with_suffix(".jsonl.tmp")
+        return self._marcador(self.saida_ano(ano), ".tmp")
 
     def empty_ano(self, ano: int) -> Path:
-        return self.saida_ano(ano).with_suffix(".jsonl.empty")
+        return self._marcador(self.saida_ano(ano), ".empty")
 
     def ano_pronto(self, ano: int) -> bool:
         """True quando o arquivo anual existe e contém todas as chaves exigidas."""
@@ -69,10 +87,10 @@ class SiopArquivos:
         return self._base / "_particoes" / f"ano={ano}" / f"funcao={funcao_codigo}.jsonl"
 
     def tmp_particao(self, ano: int, funcao_codigo: str) -> Path:
-        return self.saida_particao(ano, funcao_codigo).with_suffix(".jsonl.tmp")
+        return self._marcador(self.saida_particao(ano, funcao_codigo), ".tmp")
 
     def empty_particao(self, ano: int, funcao_codigo: str) -> Path:
-        return self.saida_particao(ano, funcao_codigo).with_suffix(".jsonl.empty")
+        return self._marcador(self.saida_particao(ano, funcao_codigo), ".empty")
 
     def estado_particao(self, ano: int, funcao_codigo: str) -> Path:
         return (
@@ -92,7 +110,7 @@ class SiopArquivos:
 
     def stream_jsonl(
         self,
-        registros: Generator[dict, None, None],
+        registros: Iterable[dict],
         destino: str | Path,
         modo: str = "w",
         flush_interval: int = _FLUSH_INTERVAL_PADRAO,
@@ -118,19 +136,15 @@ class SiopArquivos:
         caminho_tmp = caminho.with_suffix(caminho.suffix + ".tmp")
 
         total = 0
-        try:
-            with open(caminho_tmp, modo, encoding="utf-8") as f:
-                for registro in registros:
-                    json.dump(registro, f, ensure_ascii=False)
-                    f.write("\n")
-                    total += 1
-                    if total % flush_interval == 0:
-                        f.flush()
-                f.flush()
+        with open(caminho_tmp, modo, encoding="utf-8") as f:
+            for registro in registros:
+                json.dump(registro, f, ensure_ascii=False)
+                f.write("\n")
+                total += 1
+                if total % flush_interval == 0:
+                    f.flush()
+            f.flush()
 
-            caminho_tmp.replace(caminho)
-
-        except Exception:
-            raise  
+        caminho_tmp.replace(caminho)
 
         return total

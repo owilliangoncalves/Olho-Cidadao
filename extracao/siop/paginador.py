@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Generator
 
 from extracao.siop.cliente import SiopClienteSPARQL
 from extracao.siop.queries import SiopQueryBuilder
@@ -45,6 +44,12 @@ class SiopPaginador:
         self._page_size_minima = page_size_minima
         self._detail_batch_size = detail_batch_size
         self._max_workers_detalhes = max_workers_detalhes
+
+    @property
+    def page_size_inicial(self) -> int:
+        """Expõe o tamanho inicial negociado para paginação."""
+
+        return self._page_size_inicial
 
     # ── busca de IDs ─────────────────────────────────────────────────────────
 
@@ -215,35 +220,3 @@ class SiopPaginador:
             )
 
         return registros
-
-    # ── gerador público ──────────────────────────────────────────────────────
-
-    def gerar_registros(
-        self,
-        ano: int,
-        funcao_codigo: str,
-        last_item_uri: str | None = None,
-        page_size: int | None = None,
-    ) -> Generator[dict, None, None]:
-        """Gera registros detalhados de uma partição `ano x função` sob demanda.
-
-        Produz cada registro imediatamente após receber a resposta do lote de
-        detalhes — compatível com `SiopArquivos.stream_jsonl` para escrita
-        incremental sem acumular tudo em memória.
-        """
-
-        tamanho = page_size if page_size is not None else self._page_size_inicial
-
-        while True:
-            item_uris, tamanho = self.buscar_ids_pagina(
-                ano, funcao_codigo, last_item_uri, tamanho
-            )
-            if not item_uris:
-                break
-
-            yield from self.coletar_registros_detalhados(ano, item_uris)
-
-            last_item_uri = item_uris[-1]
-
-            if len(item_uris) < tamanho:
-                break

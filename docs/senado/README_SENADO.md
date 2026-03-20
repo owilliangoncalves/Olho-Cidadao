@@ -2,9 +2,14 @@
 
 Documentação técnica do módulo de extracao do Senado.
 
-Arquivo principal:
+Arquivos principais:
 
-- `extracao/senado/senadores.py`
+- `extracao/senado/__init__.py`
+- `extracao/senado/config.py`
+- `extracao/senado/arquivos.py`
+- `extracao/senado/dados.py`
+- `extracao/senado/persistencia.py`
+- `extracao/senado/tarefas.py`
 
 ## Objetivo
 
@@ -28,6 +33,15 @@ uv run python main.py extrair-senado --endpoint ceaps
 - arquivo de estado `.state.json` por ano
 - marcador `.empty` para anos sem dados
 - promocao atomica para o arquivo final
+
+## Organização
+
+- `extracao.senado` expõe a orquestração pública `DadosSenado`
+- `config.py` resolve endpoint e intervalo anual
+- `arquivos.py` deriva artefatos anuais e valida saída reaproveitável
+- `dados.py` normaliza o payload e enriquece registros
+- `persistencia.py` isola a serialização anual
+- `tarefas.py` concentra helpers puros de ordem e contagem
 
 ## Campos importantes para banco e joins
 

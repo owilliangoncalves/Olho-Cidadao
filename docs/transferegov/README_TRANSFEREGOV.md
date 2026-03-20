@@ -2,9 +2,11 @@
 
 Documentação técnica dos crawlers do ecossistema Transferegov.
 
-Arquivo principal:
+Estrutura do pacote:
 
-- `extracao/transferegov/recursos.py`
+- `extracao/transferegov/__init__.py`: fachada pública e orquestração.
+- `extracao/transferegov/config.py`: catálogo de grupos e configuração operacional.
+- `extracao/transferegov/tarefas.py`: helpers puros de seleção de recursos e caminhos.
 
 ## Objetivo
 
@@ -42,12 +44,13 @@ uv run python main.py extrair-transferegov-teds --recursos programa plano_acao t
 - filtros livres passados pela CLI via `--filtro chave=valor`
 - saída em JSON Lines com `_meta.filtros`
 - nomes de arquivos derivados do conjunto de filtros aplicados
+- recursos inválidos são ignorados com log e sem abortar os válidos
 
 ## Saídas
 
 - `data/transferegov/especial/<recurso>/consulta=<assinatura>.json`
 - `data/transferegov/fundoafundo/<recurso>/consulta=<assinatura>.json`
-- `data/transferegov/teds/<recurso>/consulta=<assinatura>.json`
+- `data/transferegov/ted/<recurso>/consulta=<assinatura>.json`
 
 ## Recursos hoje suportados
 

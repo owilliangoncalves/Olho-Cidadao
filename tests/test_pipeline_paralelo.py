@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from infra.errors import UserInputError
-from pipeline_paralelo import PipelineParalelo
+from pipeline import PipelineParalelo
 
 
 class PipelineParaleloTestCase(unittest.TestCase):
@@ -39,7 +39,7 @@ class PipelineParaleloTestCase(unittest.TestCase):
             "siconfi_tamanho_pagina": 1000,
         }
 
-        with patch("pipeline_paralelo.obter_parametros_pipeline", return_value=config):
+        with patch("pipeline.config.obter_parametros_pipeline", return_value=config):
             pipeline = PipelineParalelo()
 
         self.assertFalse(pipeline.incluir_camara)
@@ -61,7 +61,7 @@ class PipelineParaleloTestCase(unittest.TestCase):
             "fontes": {},
         }
 
-        with patch("pipeline_paralelo.obter_parametros_pipeline", return_value=config):
+        with patch("pipeline.config.obter_parametros_pipeline", return_value=config):
             with self.assertRaises(UserInputError):
                 PipelineParalelo()
 
@@ -77,7 +77,7 @@ class PipelineParaleloTestCase(unittest.TestCase):
             "fontes": {},
         }
 
-        with patch("pipeline_paralelo.obter_parametros_pipeline", return_value=config):
+        with patch("pipeline.config.obter_parametros_pipeline", return_value=config):
             with self.assertRaises(UserInputError):
                 PipelineParalelo()
 
