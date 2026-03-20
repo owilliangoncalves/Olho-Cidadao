@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Documentação técnica
-    url: https://github.com/brasilemdados/Olho-Cidadao/tree/main/docs
+    url: https://github.com/brasilemdados/Olho-Cidadao/tree/desenvolvimento/docs
     about: Consulte a documentacao modular antes de abrir uma issue de uso ou entendimento.
-  - name: Politica de seguranca
-    url: https://github.com/brasilemdados/Olho-Cidadao/blob/main/SECURITY.md
-    about: Vulnerabilidades e vazamentos de credenciais nao devem ser publicados em issue publica.
+  - name: Política de seguranca
+    url: https://github.com/brasilemdados/Olho-Cidadao/blob/desenvolvimento/SECURITY.md
+    about: Vulnerabilidades e vazamentos de credenciais nao devem ser publicados em issue pública.

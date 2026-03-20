@@ -2,17 +2,54 @@ name: CI
 
 on:
   pull_request:
+    branches:
+      - desenvolvimento
+      - main
   push:
     branches:
-      - main
+      - "**"
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
+  branch_policy:
+    name: Branch policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate branch naming
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BRANCH="$HEAD_REF"
+          else
+            BRANCH="$REF_NAME"
+          fi
+
+          case "$BRANCH" in
+            main|desenvolvimento|feat/*|fix/*)
+              echo "Branch válida: $BRANCH"
+              ;;
+            *)
+              echo "Branch inválida: $BRANCH"
+              echo "Use apenas feat/* ou fix/*. As exceções permitidas são main e desenvolvimento."
+              exit 1
+              ;;
+          esac
+
   python:
     name: Python checks
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: branch_policy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,6 +58,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+          cache: pip
 
       - name: Install dependencies
         run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
@@ -37,6 +75,8 @@ jobs:
   rust:
     name: Rust tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: branch_policy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,12 +84,17 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+
       - name: Run tests
         run: cargo test --manifest-path apps/cidadao_de_olho/Cargo.toml --locked
 
   frontend:
     name: Frontend build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: branch_policy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,3 +113,29 @@ jobs:
       - name: Build
         working-directory: apps/cidadao_de_olho/ui
         run: npm run build
+
+  sync_main:
+    name: Sync main from desenvolvimento
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - python
+      - rust
+      - frontend
+    if: github.event_name == 'push' && github.ref == 'refs/heads/desenvolvimento'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fast-forward main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main desenvolvimento
+          git checkout -B main origin/main
+          git merge --ff-only origin/desenvolvimento
+          git push origin main:main

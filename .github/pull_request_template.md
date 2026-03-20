@@ -1,6 +1,10 @@
-## Resumo
+# Resumo
 
 Descreva o objetivo desta mudanca e o problema que ela resolve.
+
+## Branch
+
+- [ ] Minha branch segue o padrao `feat/*` ou `fix/*`
 
 ## Tipo de mudanca
 
@@ -15,7 +19,7 @@ Descreva o objetivo desta mudanca e o problema que ela resolve.
 - [ ] `python -m ruff check .`
 - [ ] `python -m unittest discover -s tests -v`
 - [ ] `python -m py_compile $(rg --files -g '*.py')`
-- [ ] `cargo test --manifest-path apps/cidadao_de_olho/Cargo.toml`
+- [ ] `cargo test --manifest-path apps/cidadao_de_olho/Cargo.toml --locked`
 - [ ] `cd apps/cidadao_de_olho/ui && npm run build`
 
 ## Checklist
